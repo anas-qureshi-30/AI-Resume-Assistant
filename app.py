@@ -26,5 +26,10 @@ def jdParserApi():
     userInput=request.get_json()
     aiCompareResume=compareResume.compareResume(userInput.get("jobDescription"))
     return jsonify({"aiCompareResume":aiCompareResume})
+
+@app.route('/resumeRankingPredictor')
+def resumeRankingPredictor():
+    return render_template('resumeRankingPredictor.html')
+
 if __name__=='__main__':
     app.run(debug=True)

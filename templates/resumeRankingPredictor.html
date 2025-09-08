@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/homePage.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/resumeRankingPredictor.css')}}">
+    <script src="{{url_for('static',filename='js/homePage.js')}}"></script>
+    <script src="{{url_for('static',filename='js/resumeRankingPredictor.js')}}"></script>
+    <title>Resume Ranking Predictor - AI Resume Assistant</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI Resume Assistant</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/generator">Generator</a></li>
+                <li><a href="/jdParser">JD Parser</a></li>
+                <li><a href="/rankingPredictor" class="active">Ranking Predictor</a></li>
+                <li><a href="#" class="cta-button">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="predictor-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Resume Ranking Predictor</h1>
+                <p>See how your resume ranks against 100+ real resumes for the same position using AI embeddings</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Resumes Analyzed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">12K+</div>
+                        <div class="stat-label">Job Positions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="predictor-main">
+        <div class="container">
+            <div class="predictor-grid">
+                <!-- Left Panel: Upload & Job Selection -->
+                <div class="predictor-panel">
+                    <div class="panel-card">
+                        <h3>📄 Your Resume</h3>
+                        <div id="resume-status" class="resume-status">
+                            <div class="status-placeholder">
+                                <div class="upload-icon">📁</div>
+                                <p>No resume uploaded yet</p>
+                                <button class="btn-primary" onclick="openModal('upload-modal')">Upload Resume</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-card">
+                        <h3>🎯 Target Job Position</h3>
+                        <div class="job-selector">
+                            <select id="job-category" onchange="updateJobRoles()">
+                                <option value="">Select Job Category</option>
+                                <option value="software">Software Engineering</option>
+                                <option value="data">Data Science</option>
+                                <option value="product">Product Management</option>
+                                <option value="design">UX/UI Design</option>
+                                <option value="marketing">Digital Marketing</option>
+                                <option value="finance">Finance</option>
+                            </select>
+                        </div>
+                        <div class="job-selector">
+                            <select id="job-role" disabled>
+                                <option value="">Select Specific Role</option>
+                            </select>
+                        </div>
+                        <div class="job-selector">
+                            <select id="experience-level">
+                                <option value="entry">Entry Level (0-2 years)</option>
+                                <option value="mid" selected>Mid Level (3-5 years)</option>
+                                <option value="senior">Senior Level (6+ years)</option>
+                                <option value="lead">Lead/Manager</option>
+                            </select>
+                        </div>
+                        <button id="analyze-btn" class="btn-primary full-width" onclick="startAnalysis()" disabled>
+                            <span class="btn-text">Analyze Resume</span>
+                            <span class="btn-loading" style="display:none;">
+                                <div class="loading"></div>
+                                Analyzing...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Results -->
+                <div class="results-panel" id="results-panel" style="display: none;">
+                    <div class="results-header">
+                        <h2>🏆 Your Resume Ranking</h2>
+                        <div class="analysis-info">
+                            <span id="analysis-date"></span>
+                            <span id="analysis-pool"></span>
+                        </div>
+                    </div>
+
+                    <!-- Main Score Display -->
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <svg class="score-svg" width="200" height="200">
+                                <circle class="score-bg" cx="100" cy="100" r="80"></circle>
+                                <circle class="score-fill" cx="100" cy="100" r="80" id="score-progress"></circle>
+                            </svg>
+                            <div class="score-content">
+                                <div class="score-number" id="final-score">0</div>
+                                <div class="score-label">Overall Score</div>
+                            </div>
+                        </div>
+                        <div class="score-details">
+                            <div class="percentile">
+                                <div class="percentile-value" id="percentile-rank">0th</div>
+                                <div class="percentile-label">Percentile</div>
+                            </div>
+                            <div class="ranking">
+                                <div class="ranking-value" id="rank-position">#0</div>
+                                <div class="ranking-label">out of 127 resumes</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="category-breakdown">
+                        <h3>📊 Category Performance</h3>
+                        <div class="categories">
+                            <div class="category-item">
+                                <div class="category-header">
+                                    <span class="category-name">Skills Match</span>
+                                    <span class="category-score" id="skills-score">0%</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill" id="skills-fill"></div>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-header">
+                                    <span class="category-name">Experience</span>
+                                    <span class="category-score" id="experience-score">0%</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill" id="experience-fill"></div>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-header">
+                                    <span class="category-name">Education</span>
+                                    <span class="category-score" id="education-score">0%</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill" id="education-fill"></div>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-header">
+                                    <span class="category-name">Keywords</span>
+                                    <span class="category-score" id="keywords-score">0%</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill" id="keywords-fill"></div>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-header">
+                                    <span class="category-name">Format & ATS</span>
+                                    <span class="category-score" id="format-score">0%</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill" id="format-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights -->
+                    <div class="ai-insights">
+                        <h3>🤖 AI Insights & Recommendations</h3>
+                        <div class="insights-grid">
+                            <div class="insight-card strength">
+                                <div class="insight-icon">💪</div>
+                                <div class="insight-content">
+                                    <h4>Strengths</h4>
+                                    <ul id="strengths-list">
+                                        <li>Loading analysis...</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="insight-card weakness">
+                                <div class="insight-icon">⚠️</div>
+                                <div class="insight-content">
+                                    <h4>Areas for Improvement</h4>
+                                    <ul id="weaknesses-list">
+                                        <li>Loading analysis...</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="insight-card recommendation">
+                                <div class="insight-icon">🚀</div>
+                                <div class="insight-content">
+                                    <h4>Quick Wins</h4>
+                                    <ul id="recommendations-list">
+                                        <li>Loading recommendations...</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Chart -->
+                    <div class="comparison-chart">
+                        <h3>📈 How You Compare</h3>
+                        <div class="chart-container">
+                            <canvas id="comparison-chart" width="600" height="300"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color your-score"></div>
+                                <span>Your Resume</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color average-score"></div>
+                                <span>Average Score</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color top-10"></div>
+                                <span>Top 10%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Items -->
+                    <div class="action-items">
+                        <h3>✅ Next Steps</h3>
+                        <div class="actions-grid">
+                            <button class="action-btn" onclick="downloadReport()">
+                                <div class="action-icon">📄</div>
+                                <div class="action-text">Download Report</div>
+                            </button>
+                            <button class="action-btn" onclick="optimizeResume()">
+                                <div class="action-icon">⚡</div>
+                                <div class="action-text">Optimize Resume</div>
+                            </button>
+                            <button class="action-btn" onclick="findCourses()">
+                                <div class="action-icon">📚</div>
+                                <div class="action-text">Skill Courses</div>
+                            </button>
+                            <button class="action-btn" onclick="reanalyze()">
+                                <div class="action-icon">🔄</div>
+                                <div class="action-text">Re-analyze</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('upload-modal')">&times;</button>
+            <h2>Upload Your Resume</h2>
+            <div class="upload-area" onclick="document.getElementById('resume-file').click()">
+                <div class="upload-icon">📄</div>
+                <h3>Drop your resume here or click to browse</h3>
+                <p>Supports PDF, DOCX formats • Max 10MB</p>
+                <input type="file" id="resume-file" style="display: none;" accept=".pdf,.docx" onchange="handleResumeUpload(this)">
+            </div>
+            <div class="upload-tips">
+                <h4>💡 Tips for better analysis:</h4>
+                <ul>
+                    <li>Use a clean, well-formatted resume</li>
+                    <li>Include relevant keywords for your target role</li>
+                    <li>Ensure all sections are properly labeled</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notification-message">Analysis complete!</div>
+    </div>
+</body>
+</html>
