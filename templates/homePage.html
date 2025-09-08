@@ -617,7 +617,7 @@
                     <h3>Job Description Parser & Auto-Matching</h3>
                     <p>Upload any job description and get instant analysis with missing keywords and match percentage scores.</p>
                     <div class="feature-actions">
-                        <button class="btn-small btn-primary" >Try Parser</button>
+                        <button class="btn-small btn-primary" onclick="window.location.href='/jdParser'">Try Parser</button>
                         <button class="btn-small btn-outline">View Demo</button>
                     </div>
                 </div>
@@ -842,8 +842,8 @@
             <div class="upload-area" onclick="document.getElementById('resume-file').click()">
                 <div class="upload-icon">📄</div>
                 <h3>Drop your resume here or click to browse</h3>
-                <p>Supports PDF, DOC, DOCX formats</p>
-                <input type="file" id="resume-file" style="display: none;" accept=".pdf,.doc,.docx" onchange="handleFileUpload(this)">
+                <p>Supports PDF, DOCX formats</p>
+                <input type="file" id="resume-file" style="display: none;" accept=".pdf,.docx" onchange="handleFileUpload(this)">
             </div>
         </div>
     </div>

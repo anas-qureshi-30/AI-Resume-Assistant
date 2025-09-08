@@ -15,5 +15,4 @@ def generateTemplate(userDescription):
     "5. If the user asks for anything else that is not a resume template request, respond only with: 'Sorry, I am built to generate resume templates only.' "
     "6. Output must always be ONLY the raw HTML code without any extra text. "
     "User input: " + userDescription)
-    print(response)
     return response.text
