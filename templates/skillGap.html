@@ -481,142 +481,8 @@
         </div>
 
         <script>
-            const skillDatabase = {
-                'software-engineer': {
-                    required: ['JavaScript', 'Python', 'Git', 'SQL', 'React', 'Node.js', 'HTML/CSS', 'REST APIs', 'Testing'],
-                    nice: ['Docker', 'AWS', 'MongoDB', 'TypeScript', 'GraphQL']
-                },
-                'data-scientist': {
-                    required: ['Python', 'SQL', 'Statistics', 'Machine Learning', 'Pandas', 'NumPy', 'Matplotlib', 'Jupyter'],
-                    nice: ['TensorFlow', 'PyTorch', 'R', 'Tableau', 'Apache Spark', 'AWS SageMaker']
-                },
-                'devops-engineer': {
-                    required: ['Docker', 'Kubernetes', 'AWS', 'Linux', 'Git', 'CI/CD', 'Terraform', 'Monitoring'],
-                    nice: ['Ansible', 'Jenkins', 'Prometheus', 'Grafana', 'Helm', 'Azure']
-                },
-                'product-manager': {
-                    required: ['Product Strategy', 'User Research', 'Analytics', 'Roadmapping', 'Agile/Scrum', 'Stakeholder Management'],
-                    nice: ['SQL', 'A/B Testing', 'Figma', 'JIRA', 'Market Research', 'Competitive Analysis']
-                },
-                'ui-ux-designer': {
-                    required: ['Figma', 'User Research', 'Prototyping', 'Wireframing', 'Design Systems', 'Usability Testing'],
-                    nice: ['Adobe Creative Suite', 'HTML/CSS', 'JavaScript', 'Sketch', 'InVision', 'User Psychology']
-                }
-            };
-
-            const learningResources = {
-                'JavaScript': [
-                    {
-                        title: 'JavaScript: The Complete Guide',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '52 hours',
-                        price: '$89.99',
-                        rating: '4.6/5',
-                        url: 'https://udemy.com/javascript-complete'
-                    },
-                    {
-                        title: 'freeCodeCamp JavaScript Algorithms',
-                        type: 'free',
-                        platform: 'freeCodeCamp',
-                        duration: '300 hours',
-                        price: 'Free',
-                        rating: '4.8/5',
-                        url: 'https://freecodecamp.org/javascript'
-                    }
-                ],
-                'Docker': [
-                    {
-                        title: 'Docker Deep Dive',
-                        type: 'course',
-                        platform: 'Pluralsight',
-                        duration: '6 hours',
-                        price: '$29/month',
-                        rating: '4.7/5',
-                        url: 'https://pluralsight.com/docker'
-                    },
-                    {
-                        title: 'Docker Official Tutorial',
-                        type: 'free',
-                        platform: 'Docker Docs',
-                        duration: '4 hours',
-                        price: 'Free',
-                        rating: '4.5/5',
-                        url: 'https://docs.docker.com/get-started/'
-                    },
-                    {
-                        title: 'Build a Containerized Web App',
-                        type: 'project',
-                        platform: 'GitHub',
-                        duration: '1 week',
-                        price: 'Free',
-                        rating: '4.3/5',
-                        url: 'https://github.com/docker-projects'
-                    }
-                ],
-                'AWS': [
-                    {
-                        title: 'AWS Solutions Architect',
-                        type: 'certification',
-                        platform: 'AWS',
-                        duration: '3 months',
-                        price: '$150',
-                        rating: '4.8/5',
-                        url: 'https://aws.amazon.com/certification/'
-                    },
-                    {
-                        title: 'AWS Cloud Practitioner Essentials',
-                        type: 'course',
-                        platform: 'Coursera',
-                        duration: '4 weeks',
-                        price: '$39/month',
-                        rating: '4.6/5',
-                        url: 'https://coursera.org/aws-cloud'
-                    }
-                ],
-                'Python': [
-                    {
-                        title: 'Python for Everybody',
-                        type: 'course',
-                        platform: 'Coursera',
-                        duration: '8 weeks',
-                        price: '$39/month',
-                        rating: '4.8/5',
-                        url: 'https://coursera.org/python'
-                    },
-                    {
-                        title: 'Python.org Official Tutorial',
-                        type: 'free',
-                        platform: 'Python.org',
-                        duration: '20 hours',
-                        price: 'Free',
-                        rating: '4.7/5',
-                        url: 'https://docs.python.org/tutorial/'
-                    }
-                ],
-                'React': [
-                    {
-                        title: 'React - The Complete Guide',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '48 hours',
-                        price: '$94.99',
-                        rating: '4.6/5',
-                        url: 'https://udemy.com/react-complete'
-                    },
-                    {
-                        title: 'React Official Documentation',
-                        type: 'free',
-                        platform: 'React.dev',
-                        duration: '15 hours',
-                        price: 'Free',
-                        rating: '4.8/5',
-                        url: 'https://react.dev/learn'
-                    }
-                ]
-            };
-
-            function analyzeSkillGap() {
+            let skillGapGlobalVar = null
+            async function analyzeSkillGap() {
                 const targetRole = document.getElementById('target-role').value;
                 const experienceLevel = document.getElementById('experience-level').value;
                 if (!targetRole) {
@@ -629,200 +495,14 @@
                 const analyzeText = document.getElementById('analyze-text');
                 analyzeBtn.disabled = true;
                 analyzeText.innerHTML = '<div class="loading"></div>Analyzing your skills...';
-
-                // Simulate API call delay
-                setTimeout(() => {
-                    performAnalysis(targetRole, experienceLevel);
+                try {
+                    await displayResults(targetRole, experienceLevel);
+                } catch (error) {
+                    console.log(error)
+                } finally {
                     analyzeBtn.disabled = false;
-                    analyzeText.textContent = '🔍 Analyze Skill Gap & Generate Learning Path';
-                }, 2000);
-            }
-
-            function performAnalysis(targetRole, experienceLevel) {
-                const roleSkills = skillDatabase[targetRole];
-
-                if (!roleSkills) {
-                    alert('Role not found in database');
-                    return;
+                    analyzeText.textContent = '🔍 Analyze Skill Gap';
                 }
-
-                const allRequiredSkills = [...roleSkills.required, ...roleSkills.nice];
-                const missingSkills = allRequiredSkills.filter(skill =>
-                    !currentSkills.some(current =>
-                        current.includes(skill.toLowerCase()) || skill.toLowerCase().includes(current)
-                    )
-                );
-
-                const matchPercentage = Math.round(((allRequiredSkills.length - missingSkills.length) / allRequiredSkills.length) * 100);
-
-                displayResults(missingSkills, roleSkills, matchPercentage, targetRole);
-            }
-
-            function displayResults(missingSkills, roleSkills, matchPercentage, targetRole) {
-                // Update overview stats
-                document.getElementById('missing-skills-count').textContent = missingSkills.length;
-                document.getElementById('recommended-courses').textContent = missingSkills.length * 2;
-                document.getElementById('estimated-time').textContent = Math.max(4, missingSkills.length * 2);
-                document.getElementById('match-percentage').textContent = matchPercentage + '%';
-
-                // Generate skill gap items
-                const skillsContainer = document.getElementById('skills-container');
-                skillsContainer.innerHTML = '';
-
-                missingSkills.forEach(skill => {
-                    const isRequired = roleSkills.required.includes(skill);
-                    const priority = isRequired ? 'high' : roleSkills.nice.includes(skill) ? 'medium' : 'low';
-                    const skillElement = createSkillElement(skill, priority);
-                    skillsContainer.appendChild(skillElement);
-                });
-
-                // Generate learning timeline
-                generateLearningTimeline(missingSkills, targetRole);
-
-                // Show results
-                document.getElementById('results').classList.add('show');
-                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function createSkillElement(skill, priority) {
-                const skillDiv = document.createElement('div');
-                skillDiv.className = 'skill-item';
-
-                const priorityClass = `priority-${priority}`;
-                const priorityText = priority.charAt(0).toUpperCase() + priority.slice(1) + ' Priority';
-
-                const resources = learningResources[skill] || [
-                    {
-                        title: `Learn ${skill} - Comprehensive Course`,
-                        type: 'course',
-                        platform: 'Multiple Platforms',
-                        duration: '4-6 weeks',
-                        price: '$29-89',
-                        rating: '4.5/5',
-                        url: '#'
-                    }
-                ];
-
-                let resourcesHtml = '';
-                resources.forEach(resource => {
-                    const typeClass = `type-${resource.type}`;
-                    resourcesHtml += `
-                    <div class="resource-card">
-                        <div class="resource-header">
-                            <span class="resource-type ${typeClass}">${resource.type.toUpperCase()}</span>
-                            <span class="resource-title">${resource.title}</span>
-                        </div>
-                        <div class="resource-details">
-                            <div>📍 ${resource.platform}</div>
-                            <div>⏱️ ${resource.duration}</div>
-                            <div>💰 ${resource.price}</div>
-                            <div>⭐ ${resource.rating}</div>
-                        </div>
-                        <div class="resource-action">
-                            <a href="${resource.url}" class="btn-small btn-primary" target="_blank">
-                                🚀 Start Learning
-                            </a>
-                            <button class="btn-small btn-outline" onclick="addToLearningPath('${skill}', '${resource.title}')">
-                                📋 Add to Path
-                            </button>
-                        </div>
-                    </div>
-                `;
-                });
-
-                skillDiv.innerHTML = `
-                <div class="skill-header">
-                    <div class="skill-name">${skill}</div>
-                    <div class="skill-priority ${priorityClass}">${priorityText}</div>
-                </div>
-                <div class="skill-description">
-                    ${getSkillDescription(skill)}
-                </div>
-                <div class="learning-resources">
-                    ${resourcesHtml}
-                </div>
-            `;
-
-                return skillDiv;
-            }
-
-            function getSkillDescription(skill) {
-                const descriptions = {
-                    'JavaScript': 'Essential programming language for web development, both frontend and backend applications.',
-                    'Docker': 'Containerization technology critical for modern DevOps practices and application deployment.',
-                    'AWS': 'Leading cloud platform with comprehensive services for scalable application infrastructure.',
-                    'Python': 'Versatile programming language popular in data science, web development, and automation.',
-                    'React': 'Popular JavaScript library for building dynamic and interactive user interfaces.',
-                    'Kubernetes': 'Container orchestration platform for managing containerized applications at scale.',
-                    'SQL': 'Standard language for managing and querying relational databases.',
-                    'Git': 'Distributed version control system essential for collaborative software development.',
-                    'Machine Learning': 'AI technique for building predictive models and intelligent systems.',
-                    'CI/CD': 'Continuous Integration and Deployment practices for automated software delivery.'
-                };
-                return descriptions[skill] || `Important skill required for ${skill.toLowerCase()} proficiency in your target role.`;
-            }
-
-            function generateLearningTimeline(missingSkills, targetRole) {
-                const timeline = document.getElementById('learning-timeline');
-                timeline.innerHTML = '';
-
-                const weeks = Math.min(12, Math.max(4, missingSkills.length * 2));
-                const skillsPerWeek = Math.ceil(missingSkills.length / weeks);
-
-                for (let week = 1; week <= weeks; week++) {
-                    const startIndex = (week - 1) * skillsPerWeek;
-                    const weekSkills = missingSkills.slice(startIndex, startIndex + skillsPerWeek);
-
-                    if (weekSkills.length === 0) continue;
-
-                    const timelineItem = document.createElement('div');
-                    timelineItem.className = 'timeline-item';
-
-                    let tasksHtml = '';
-                    weekSkills.forEach(skill => {
-                        tasksHtml += `
-                        <li>Complete ${skill} fundamentals course</li>
-                        <li>Practice ${skill} with hands-on project</li>
-                        <li>Review and consolidate ${skill} knowledge</li>
-                    `;
-                    });
-
-                    timelineItem.innerHTML = `
-                    <div class="timeline-week">Week ${week}: Focus on ${weekSkills.join(', ')}</div>
-                    <ul class="timeline-tasks">${tasksHtml}</ul>
-                `;
-
-                    timeline.appendChild(timelineItem);
-                }
-
-                // Add final week for integration
-                const finalWeek = document.createElement('div');
-                finalWeek.className = 'timeline-item';
-                finalWeek.innerHTML = `
-                <div class="timeline-week">Week ${weeks + 1}: Integration & Portfolio</div>
-                <ul class="timeline-tasks">
-                    <li>Build comprehensive project using multiple skills</li>
-                    <li>Update resume with new competencies</li>
-                    <li>Prepare for ${targetRole} interviews</li>
-                    <li>Apply to target positions</li>
-                </ul>
-            `;
-                timeline.appendChild(finalWeek);
-            }
-
-            function addToLearningPath(skill, resourceTitle) {
-                // This would integrate with a backend system to save user's learning path
-                showNotification(`Added "${resourceTitle}" to your learning path!`, 'success');
-
-                // Store in localStorage for demo purposes
-                const learningPath = JSON.parse(localStorage.getItem('userLearningPath') || '[]');
-                learningPath.push({
-                    skill: skill,
-                    resource: resourceTitle,
-                    dateAdded: new Date().toISOString(),
-                    status: 'planned'
-                });
-                localStorage.setItem('userLearningPath', JSON.stringify(learningPath));
             }
 
             function showNotification(message, type = 'success') {
@@ -861,317 +541,42 @@
                 }, 3000);
             }
 
-            // Add more comprehensive learning resources
-            const extendedLearningResources = {
-                ...learningResources,
-                'Kubernetes': [
-                    {
-                        title: 'Certified Kubernetes Administrator (CKA)',
-                        type: 'certification',
-                        platform: 'Linux Foundation',
-                        duration: '3 months',
-                        price: '$395',
-                        rating: '4.8/5',
-                        url: 'https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/'
-                    },
-                    {
-                        title: 'Kubernetes for Beginners',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '8 hours',
-                        price: '$84.99',
-                        rating: '4.6/5',
-                        url: 'https://udemy.com/kubernetes-beginners'
-                    },
-                    {
-                        title: 'Kubernetes Official Tutorials',
-                        type: 'free',
-                        platform: 'Kubernetes.io',
-                        duration: '12 hours',
-                        price: 'Free',
-                        rating: '4.7/5',
-                        url: 'https://kubernetes.io/docs/tutorials/'
-                    }
-                ],
-                'Machine Learning': [
-                    {
-                        title: 'Machine Learning Specialization',
-                        type: 'course',
-                        platform: 'Coursera (Stanford)',
-                        duration: '3 months',
-                        price: '$49/month',
-                        rating: '4.9/5',
-                        url: 'https://coursera.org/specializations/machine-learning-introduction'
-                    },
-                    {
-                        title: 'Fast.ai Practical Deep Learning',
-                        type: 'free',
-                        platform: 'Fast.ai',
-                        duration: '7 weeks',
-                        price: 'Free',
-                        rating: '4.8/5',
-                        url: 'https://course.fast.ai/'
-                    },
-                    {
-                        title: 'Build ML Models with Scikit-learn',
-                        type: 'project',
-                        platform: 'Kaggle Learn',
-                        duration: '4 hours',
-                        price: 'Free',
-                        rating: '4.5/5',
-                        url: 'https://kaggle.com/learn/intro-to-machine-learning'
-                    }
-                ],
-                'SQL': [
-                    {
-                        title: 'SQL for Data Science',
-                        type: 'course',
-                        platform: 'Coursera',
-                        duration: '4 weeks',
-                        price: '$39/month',
-                        rating: '4.6/5',
-                        url: 'https://coursera.org/learn/sql-for-data-science'
-                    },
-                    {
-                        title: 'SQLBolt Interactive Tutorial',
-                        type: 'free',
-                        platform: 'SQLBolt',
-                        duration: '10 hours',
-                        price: 'Free',
-                        rating: '4.7/5',
-                        url: 'https://sqlbolt.com/'
-                    },
-                    {
-                        title: 'Database Design Project',
-                        type: 'project',
-                        platform: 'GitHub',
-                        duration: '2 weeks',
-                        price: 'Free',
-                        rating: '4.4/5',
-                        url: 'https://github.com/sql-projects'
-                    }
-                ],
-                'Git': [
-                    {
-                        title: 'Git Complete: The Definitive Guide',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '6 hours',
-                        price: '$74.99',
-                        rating: '4.5/5',
-                        url: 'https://udemy.com/git-complete'
-                    },
-                    {
-                        title: 'Pro Git Book',
-                        type: 'free',
-                        platform: 'Git-SCM',
-                        duration: '20 hours',
-                        price: 'Free',
-                        rating: '4.8/5',
-                        url: 'https://git-scm.com/book'
-                    },
-                    {
-                        title: 'GitHub Learning Lab',
-                        type: 'free',
-                        platform: 'GitHub',
-                        duration: '8 hours',
-                        price: 'Free',
-                        rating: '4.6/5',
-                        url: 'https://skills.github.com/'
-                    }
-                ],
-                'TypeScript': [
-                    {
-                        title: 'TypeScript: The Complete Developer\'s Guide',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '24 hours',
-                        price: '$89.99',
-                        rating: '4.7/5',
-                        url: 'https://udemy.com/typescript-complete'
-                    },
-                    {
-                        title: 'TypeScript Handbook',
-                        type: 'free',
-                        platform: 'TypeScript.org',
-                        duration: '15 hours',
-                        price: 'Free',
-                        rating: '4.8/5',
-                        url: 'https://www.typescriptlang.org/docs/'
-                    }
-                ],
-                'Node.js': [
-                    {
-                        title: 'The Complete Node.js Developer Course',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '35 hours',
-                        price: '$94.99',
-                        rating: '4.7/5',
-                        url: 'https://udemy.com/nodejs-complete'
-                    },
-                    {
-                        title: 'Node.js Official Guides',
-                        type: 'free',
-                        platform: 'Node.js.org',
-                        duration: '12 hours',
-                        price: 'Free',
-                        rating: '4.6/5',
-                        url: 'https://nodejs.org/en/docs/guides/'
-                    }
-                ],
-                'MongoDB': [
-                    {
-                        title: 'MongoDB Developer Path',
-                        type: 'certification',
-                        platform: 'MongoDB University',
-                        duration: '2 months',
-                        price: 'Free',
-                        rating: '4.7/5',
-                        url: 'https://university.mongodb.com/'
-                    },
-                    {
-                        title: 'MongoDB Crash Course',
-                        type: 'free',
-                        platform: 'YouTube',
-                        duration: '4 hours',
-                        price: 'Free',
-                        rating: '4.5/5',
-                        url: 'https://youtube.com/mongodb-crash-course'
-                    }
-                ],
-                'Linux': [
-                    {
-                        title: 'Linux Administration Bootcamp',
-                        type: 'course',
-                        platform: 'Udemy',
-                        duration: '8 hours',
-                        price: '$84.99',
-                        rating: '4.6/5',
-                        url: 'https://udemy.com/linux-administration'
-                    },
-                    {
-                        title: 'Linux Journey',
-                        type: 'free',
-                        platform: 'LinuxJourney.com',
-                        duration: '30 hours',
-                        price: 'Free',
-                        rating: '4.7/5',
-                        url: 'https://linuxjourney.com/'
-                    }
-                ],
-                'Terraform': [
-                    {
-                        title: 'HashiCorp Certified: Terraform Associate',
-                        type: 'certification',
-                        platform: 'HashiCorp',
-                        duration: '2 months',
-                        price: '$70',
-                        rating: '4.8/5',
-                        url: 'https://hashicorp.com/certification/terraform-associate'
-                    },
-                    {
-                        title: 'Terraform Tutorial for Beginners',
-                        type: 'free',
-                        platform: 'Terraform.io',
-                        duration: '6 hours',
-                        price: 'Free',
-                        rating: '4.6/5',
-                        url: 'https://learn.hashicorp.com/terraform'
-                    }
-                ]
-            };
-
-            // Update the learning resources to use the extended version
-            Object.assign(learningResources, extendedLearningResources);
-
-            // Add skill database for more roles
-            const extendedSkillDatabase = {
-                ...skillDatabase,
-                'cybersecurity-analyst': {
-                    required: ['Network Security', 'Incident Response', 'Risk Assessment', 'Security Tools', 'Compliance', 'Penetration Testing'],
-                    nice: ['Python', 'Wireshark', 'Metasploit', 'CISSP', 'Ethical Hacking', 'Forensics']
-                },
-                'cloud-architect': {
-                    required: ['AWS', 'Azure', 'System Design', 'Networking', 'Security', 'Infrastructure as Code', 'Monitoring'],
-                    nice: ['Terraform', 'Kubernetes', 'Docker', 'Python', 'Cost Optimization', 'Disaster Recovery']
-                },
-                'machine-learning-engineer': {
-                    required: ['Python', 'Machine Learning', 'TensorFlow', 'PyTorch', 'MLOps', 'Data Engineering', 'Statistics'],
-                    nice: ['Docker', 'Kubernetes', 'AWS SageMaker', 'Apache Spark', 'Model Deployment', 'A/B Testing']
+            async function displayResults(targetRole, experienceLevel) {
+                const userInput = {
+                    "targetRole": targetRole,
+                    "experienceLevel": experienceLevel
                 }
-            };
-
-            Object.assign(skillDatabase, extendedSkillDatabase);
-
-            // Enhanced analysis function with more detailed insights
-            function performAnalysis(targetRole, experienceLevel, currentSkillsText) {
-                const roleSkills = skillDatabase[targetRole];
-
-                if (!roleSkills) {
-                    alert('Role not found in database');
-                    return;
-                }
-
-                // Calculate more sophisticated matching
-                const allRequiredSkills = roleSkills.required;
-                const allNiceSkills = roleSkills.nice;
-
-                const missingRequired = allRequiredSkills.filter(skill =>
-                    !currentSkills.some(current =>
-                        current.includes(skill.toLowerCase()) || skill.toLowerCase().includes(current)
-                    )
-                );
-
-                const missingNice = allNiceSkills.filter(skill =>
-                    !currentSkills.some(current =>
-                        current.includes(skill.toLowerCase()) || skill.toLowerCase().includes(current)
-                    )
-                );
-
-                // Prioritize required skills
-                const prioritizedMissingSkills = [
-                    ...missingRequired.map(skill => ({ skill, priority: 'high' })),
-                    ...missingNice.map(skill => ({ skill, priority: 'medium' }))
-                ];
-
-                const totalSkills = allRequiredSkills.length + allNiceSkills.length;
-                const matchedSkills = totalSkills - missingRequired.length - missingNice.length;
-                const matchPercentage = Math.round((matchedSkills / totalSkills) * 100);
-
-                displayEnhancedResults(prioritizedMissingSkills, matchPercentage, targetRole, experienceLevel);
-            }
-
-            function displayEnhancedResults(missingSkills, matchPercentage, targetRole, experienceLevel) {
+                const response = await fetch('/api/skillGap', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userInput)
+                });
+                const data = await response.json()
+                skillGapGlobalVar = data.skillGapData
+                console.log(skillGapGlobalVar)
                 // Update overview stats
-                document.getElementById('missing-skills-count').textContent = missingSkills.length;
-                document.getElementById('recommended-courses').textContent = missingSkills.length * 2;
+                document.getElementById('missing-skills-count').textContent = skillGapGlobalVar.missingSkills_count;
+                document.getElementById('recommended-courses').textContent = skillGapGlobalVar.missingSkills_count * 2;
 
-                // Adjust timeline based on experience level
-                let baseWeeks = missingSkills.length * 2;
-                if (experienceLevel === 'entry') baseWeeks = Math.max(baseWeeks, missingSkills.length * 3);
-                if (experienceLevel === 'senior') baseWeeks = Math.max(4, missingSkills.length * 1.5);
-
-                document.getElementById('estimated-time').textContent = Math.ceil(baseWeeks);
-                document.getElementById('match-percentage').textContent = matchPercentage + '%';
+                document.getElementById('estimated-time').textContent = skillGapGlobalVar.estimatedCompletionTime;
+                document.getElementById('match-percentage').textContent = skillGapGlobalVar.skillsMatchPercentage + '%';
 
                 // Generate skill gap items with priorities
                 const skillsContainer = document.getElementById('skills-container');
                 skillsContainer.innerHTML = '';
 
                 // Sort by priority (high first)
-                const sortedSkills = missingSkills.sort((a, b) => {
+                const sortedSkills = skillGapGlobalVar.missingSkills.sort((a, b) => {
                     const priorityOrder = { high: 3, medium: 2, low: 1 };
                     return priorityOrder[b.priority] - priorityOrder[a.priority];
                 });
-
-                sortedSkills.forEach(({ skill, priority }) => {
-                    const skillElement = createEnhancedSkillElement(skill, priority, targetRole);
+                console.log(sortedSkills)
+                sortedSkills.forEach(skill => {
+                    const skillElement = createEnhancedSkillElement(skill, skill.priority, targetRole);
                     skillsContainer.appendChild(skillElement);
                 });
-
-                // Generate enhanced learning timeline
-                generateEnhancedLearningTimeline(sortedSkills, targetRole, experienceLevel);
 
                 // Show results with smooth animation
                 document.getElementById('results').classList.add('show');
@@ -1185,11 +590,8 @@
                 const priorityClass = `priority-${priority}`;
                 const priorityText = priority.charAt(0).toUpperCase() + priority.slice(1) + ' Priority';
 
-                // Get resources or create default ones
-                const resources = learningResources[skill] || generateDefaultResources(skill);
-
                 let resourcesHtml = '';
-                resources.forEach(resource => {
+                skill.studyMaterials.forEach(resource => {
                     const typeClass = `type-${resource.type}`;
                     const typeIcon = {
                         course: '🎓',
@@ -1214,9 +616,6 @@
                             <a href="${resource.url}" class="btn-small btn-primary" target="_blank">
                                 🚀 Start Learning
                             </a>
-                            <button class="btn-small btn-outline" onclick="addToLearningPath('${skill}', '${resource.title}')">
-                                📋 Add to Path
-                            </button>
                         </div>
                     </div>
                 `;
@@ -1224,11 +623,11 @@
 
                 skillDiv.innerHTML = `
                 <div class="skill-header">
-                    <div class="skill-name">${skill}</div>
-                    <div class="skill-priority ${priorityClass}">${priorityText}</div>
+                    <div class="skill-name">${skill.name}</div>
+                    <div class="skill-priority ${skill.priority}">${skill['priority']}</div>
                 </div>
                 <div class="skill-description">
-                    ${getEnhancedSkillDescription(skill, targetRole)}
+                    ${skill.description}}
                 </div>
                 <div class="learning-resources">
                     ${resourcesHtml}
@@ -1238,126 +637,6 @@
                 return skillDiv;
             }
 
-            function generateDefaultResources(skill) {
-                return [
-                    {
-                        title: `Master ${skill} - Comprehensive Course`,
-                        type: 'course',
-                        platform: 'Online Learning Platform',
-                        duration: '4-8 weeks',
-                        price: '$29-99',
-                        rating: '4.5/5',
-                        url: `https://www.google.com/search?q=learn+${encodeURIComponent(skill)}+course`
-                    },
-                    {
-                        title: `${skill} Documentation & Tutorials`,
-                        type: 'free',
-                        platform: 'Official Documentation',
-                        duration: '2-4 weeks',
-                        price: 'Free',
-                        rating: '4.3/5',
-                        url: `https://www.google.com/search?q=${encodeURIComponent(skill)}+official+documentation+tutorial`
-                    }
-                ];
-            }
-
-            function getEnhancedSkillDescription(skill, targetRole) {
-                const roleSpecificDescriptions = {
-                    'software-engineer': {
-                        'JavaScript': 'Core language for modern web development. Essential for both frontend React applications and backend Node.js services.',
-                        'Python': 'Versatile language used for backend services, automation, and data processing in modern software systems.',
-                        'Docker': 'Containerization is crucial for consistent deployments and microservices architecture.'
-                    },
-                    'devops-engineer': {
-                        'Docker': 'Fundamental containerization technology for consistent application packaging and deployment across environments.',
-                        'Kubernetes': 'Industry-standard container orchestration platform for managing scalable, resilient applications.',
-                        'AWS': 'Leading cloud platform with comprehensive DevOps tooling and managed services.'
-                    },
-                    'data-scientist': {
-                        'Python': 'Primary language for data analysis, machine learning, and statistical computing in the data science ecosystem.',
-                        'Machine Learning': 'Core competency for building predictive models and extracting insights from data.',
-                        'SQL': 'Essential for data extraction, transformation, and analysis from relational databases.'
-                    }
-                };
-
-                const roleDescriptions = roleSpecificDescriptions[targetRole] || {};
-                return roleDescriptions[skill] || getSkillDescription(skill);
-            }
-
-            function generateEnhancedLearningTimeline(skills, targetRole, experienceLevel) {
-                const timeline = document.getElementById('learning-timeline');
-                timeline.innerHTML = '';
-
-                // Adjust timeline based on experience and priorities
-                const highPrioritySkills = skills.filter(s => s.priority === 'high').map(s => s.skill);
-                const mediumPrioritySkills = skills.filter(s => s.priority === 'medium').map(s => s.skill);
-
-                let totalWeeks = Math.max(4, skills.length * (experienceLevel === 'entry' ? 2.5 : experienceLevel === 'senior' ? 1.5 : 2));
-                totalWeeks = Math.min(16, totalWeeks); // Cap at 16 weeks
-
-                // Phase 1: Foundation & High Priority Skills
-                if (highPrioritySkills.length > 0) {
-                    const foundationWeeks = Math.ceil(totalWeeks * 0.6);
-                    for (let week = 1; week <= foundationWeeks; week++) {
-                        const skillIndex = Math.floor((week - 1) * highPrioritySkills.length / foundationWeeks);
-                        const skill = highPrioritySkills[skillIndex];
-
-                        if (skill) {
-                            timeline.appendChild(createTimelineItem(week, [skill], 'Foundation Phase', 'high'));
-                        }
-                    }
-                }
-
-                // Phase 2: Advanced & Medium Priority Skills
-                if (mediumPrioritySkills.length > 0) {
-                    const advancedStartWeek = Math.ceil(totalWeeks * 0.6) + 1;
-                    const advancedWeeks = totalWeeks - advancedStartWeek + 1;
-
-                    for (let week = 0; week < advancedWeeks && week < mediumPrioritySkills.length; week++) {
-                        const skill = mediumPrioritySkills[week];
-                        timeline.appendChild(createTimelineItem(advancedStartWeek + week, [skill], 'Advanced Phase', 'medium'));
-                    }
-                }
-
-                // Final Phase: Integration & Portfolio
-                const finalWeek = Math.ceil(totalWeeks) + 1;
-                const integrationItem = document.createElement('div');
-                integrationItem.className = 'timeline-item';
-                integrationItem.innerHTML = `
-                <div class="timeline-week">Week ${finalWeek}: Integration & Career Preparation</div>
-                <ul class="timeline-tasks">
-                    <li>Build comprehensive portfolio project showcasing learned skills</li>
-                    <li>Update resume with new competencies and certifications</li>
-                    <li>Prepare for ${targetRole} technical interviews</li>
-                    <li>Network with professionals in target role</li>
-                    <li>Apply to positions matching your enhanced skill set</li>
-                </ul>
-            `;
-                timeline.appendChild(integrationItem);
-            }
-
-            function createTimelineItem(week, skills, phase, priority) {
-                const timelineItem = document.createElement('div');
-                timelineItem.className = 'timeline-item';
-
-                const skill = skills[0]; // For now, focus on one skill per week
-                const phaseIcon = priority === 'high' ? '🔥' : '⚡';
-
-                let tasksHtml = '';
-                tasksHtml += `
-                <li>Study ${skill} fundamentals and core concepts</li>
-                <li>Complete hands-on exercises and tutorials</li>
-                <li>Build practical project using ${skill}</li>
-                <li>Review and consolidate knowledge</li>
-            `;
-
-                timelineItem.innerHTML = `
-                <div class="timeline-week">${phaseIcon} Week ${week}: ${skill} (${phase})</div>
-                <ul class="timeline-tasks">${tasksHtml}</ul>
-            `;
-
-                return timelineItem;
-            }
 
             // Initialize with sample data on page load
             document.addEventListener('DOMContentLoaded', function () {
