@@ -1,6 +1,6 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
-import templateGenerator,compareResume
+import templateGenerator,compareResume,resumeRanking
 app=Flask(__name__)
 
 @app.route("/")
@@ -35,5 +35,10 @@ def resumeRankingPredictor():
 def skillGap():
     return render_template('skillGap.html')
 
+@app.route('/api/resumeRanking')
+def resumeRankingApi():
+    rankingdata=resumeRanking.rankResume()
+    print(rankingdata)
+    return jsonify({"rankingdata":rankingdata})
 if __name__=='__main__':
     app.run(debug=True)

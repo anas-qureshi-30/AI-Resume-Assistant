@@ -2,13 +2,13 @@ import google.generativeai as gemini
 from docx import Document
 import json
 def compareResume(userJobDescription):
-    # with open("config.json") as f:
-    #     config=json.load(f)
-    file=Document("C:\\Users\\saymaqureshi27\\Desktop\\Project's\\AI Resume Assistant\RESUME.docx")
+    with open("config.json") as f:
+        config=json.load(f)
+    file=Document("C:\\Users\\saymaqureshi27\\Desktop\\Project's\\AI Resume Assistant\\RESUME.docx")
     text=""
     for para in file.paragraphs:
         text=text+para.text
-    gemini.configure(api_key="AIzaSyCSdK2F4eG_RGSJ-1w2nIMBToGLLXLCc7g")
+    gemini.configure(api_key=config["GOOGLE_API"])
     model=gemini.GenerativeModel("models/gemini-1.5-flash")
 
     response=model.generate_content(
