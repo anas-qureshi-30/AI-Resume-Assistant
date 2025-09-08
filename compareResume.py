@@ -31,5 +31,4 @@ def compareResume(userJobDescription):
     "Job Description: " + userJobDescription)
 
     output=json.loads(response.text)
-    print(output)
     return output
