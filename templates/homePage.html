@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Assistant - Smart Career Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo::before {
+            content: "🤖";
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #f0f9ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 4rem 2rem;
+            background: var(--white);
+            position: relative;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Dashboard Section */
+        .dashboard {
+            padding: 4rem 2rem;
+            background: var(--light-gray);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .metric {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            background: var(--light-gray);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(99, 102, 241, 0.05);
+            margin: 2rem 0;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-dark);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--success);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--light-gray);
+            border-radius: 0.75rem;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI Resume Assistant</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" class="cta-button">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI-Powered Career Transformation</h1>
+            <p>Transform your resume, accelerate your career, and land your dream job with our comprehensive AI-driven platform</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="openModal('upload-modal')">Upload Resume</button>
+                <a href="#features" class="btn-secondary">Explore Features</a>
+            </div>
+            <p id="filename" style="display:none;"></p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Career Solutions</h2>
+                <p>Everything you need to accelerate your career journey in one intelligent platform</p>
+            </div>
+
+            <div class="features-grid">
+                <!-- JD Parser & Auto-Matching -->
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Job Description Parser & Auto-Matching</h3>
+                    <p>Upload any job description and get instant analysis with missing keywords and match percentage scores.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary" >Try Parser</button>
+                        <button class="btn-small btn-outline">View Demo</button>
+                    </div>
+                </div>
+
+                <!-- Skill Gap Learning Path -->
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Skill Gap → Learning Path Integration</h3>
+                    <p>Get personalized course recommendations from Coursera, Udemy, and free resources based on skill gaps.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Find Courses</button>
+                        <button class="btn-small btn-outline">See Paths</button>
+                    </div>
+                </div>
+
+                <!-- AI Interview Readiness -->
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3>AI Interview Readiness Report</h3>
+                    <p>Get predicted interview questions and mock interview sets based on your resume and target job.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Start Prep</button>
+                        <button class="btn-small btn-outline">Generate Q&A</button>
+                    </div>
+                </div>
+
+                <!-- ATS Simulator -->
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>ATS Simulator</h3>
+                    <p>Simulate ATS scanning to see why resumes get rejected and how to optimize for automated systems.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Run ATS Test</button>
+                        <button class="btn-small btn-outline">ATS Guide</button>
+                    </div>
+                </div>
+
+                <!-- Multilingual Resume Transformer -->
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Multilingual Resume Transformer</h3>
+                    <p>Transform and localize resumes for international markets with region-specific formatting.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Transform Resume</button>
+                        <button class="btn-small btn-outline">Supported Languages</button>
+                    </div>
+                </div>
+
+                <!-- LinkedIn & Portfolio Sync -->
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>LinkedIn & Portfolio Sync</h3>
+                    <p>One-click synchronization to update your LinkedIn profile and portfolio with optimized content.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Sync LinkedIn</button>
+                        <button class="btn-small btn-outline">Sync Portfolio</button>
+                    </div>
+                </div>
+
+                <!-- Resume Ranking Predictor -->
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Resume Ranking Predictor</h3>
+                    <p>See how your resume ranks against 100+ real resumes for the same position using AI embeddings.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Check Ranking</button>
+                        <button class="btn-small btn-outline">View Benchmarks</button>
+                    </div>
+                </div>
+
+                <!-- Career Path Visualizer -->
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Career Path Visualizer</h3>
+                    <p>Interactive roadmap showing step-by-step career progression with timelines and milestones.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Build Path</button>
+                        <button class="btn-small btn-outline">View Examples</button>
+                    </div>
+                </div>
+
+                <!-- Career Coach Mode -->
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍💼</div>
+                    <h3>One-Click Career Coach Mode</h3>
+                    <p>Set your dream job and get comprehensive guidance including timeline, skills, and interview prep.</p>
+                    <div class="feature-actions">
+                        <button class="btn-small btn-primary">Start Coaching</button>
+                        <button class="btn-small btn-outline">Set Dream Job</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI Career Insights Dashboard</h2>
+                <p>Track your progress, analyze performance, and get actionable insights</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('overview')">Overview</button>
+                <button class="tab" onclick="switchTab('applications')">Applications</button>
+                <button class="tab" onclick="switchTab('skills')">Skills</button>
+                <button class="tab" onclick="switchTab('interviews')">Interviews</button>
+            </div>
+
+            <div class="tab-content active" id="overview">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Resume Match Score</h3>
+                        <div class="metric">
+                            <div class="metric-value" id="match-score">78%</div>
+                            <div class="metric-label">Current Average</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                        <p>+12% improvement this month</p>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Applications Tracking</h3>
+                        <div class="metric">
+                            <div class="metric-value" id="applications">24</div>
+                            <div class="metric-label">Total Sent</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <p>8 responses received (33% rate)</p>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Interview Success</h3>
+                        <div class="metric">
+                            <div class="metric-value" id="interviews">6</div>
+                            <div class="metric-label">Interviews</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <p>75% conversion from applications</p>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Skill Development</h3>
+                        <div class="metric">
+                            <div class="metric-value" id="skills">12</div>
+                            <div class="metric-label">Skills Added</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                        <p>3 certifications completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="applications">
+                <div class="dashboard-card">
+                    <h3>Application Performance Analysis</h3>
+                    <p><strong>Key Insights:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li>Backend roles show 45% higher response rates</li>
+                        <li>Applications with "Python" keyword perform 30% better</li>
+                        <li>Tuesday submissions get 2x more responses</li>
+                        <li>Recommended focus: Full-stack positions at tech startups</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="skills">
+                <div class="dashboard-card">
+                    <h3>Skill Gap Analysis</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Target Role:</label>
+                        <select id="target-role" style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
+                            <option>Senior Software Engineer</option>
+                            <option>Data Scientist</option>
+                            <option>Product Manager</option>
+                            <option>DevOps Engineer</option>
+                        </select>
+                    </div>
+                    <div id="skill-gaps">
+                        <p><strong>Missing Skills for Senior Software Engineer:</strong></p>
+                        <ul style="margin-left: 2rem;">
+                            <li>Docker & Kubernetes - <a href="#" >Find Course</a></li>
+                            <li>AWS Cloud Services - <a href="#">Find Course</a></li>
+                            <li>System Design - <a href="#">Find Course</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="interviews">
+                <div class="dashboard-card">
+                    <h3>Interview Preparation Hub</h3>
+                    <button class="btn-primary" style="margin-bottom: 1rem;">Generate Mock Interview</button>
+                    <div>
+                        <h4>Quick Links:</h4>
+                        <ul style="margin-left: 2rem;">
+                            <li><a href="#">Technical Question Bank</a></li>
+                            <li><a href="#">Behavioral Questions</a></li>
+                            <li><a href="#">Company Research Tool</a></li>
+                            <li><a href="#">Interview Tips & Strategies</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Resume Modal (Only modal kept) -->
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('upload-modal')">&times;</button>
+            <h2>Upload Your Resume</h2>
+            <div class="upload-area" onclick="document.getElementById('resume-file').click()">
+                <div class="upload-icon">📄</div>
+                <h3>Drop your resume here or click to browse</h3>
+                <p>Supports PDF, DOC, DOCX formats</p>
+                <input type="file" id="resume-file" style="display: none;" accept=".pdf,.doc,.docx" onchange="handleFileUpload(this)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notification-message">Resume uploaded successfully!</div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentTab = 'overview';
+        let uploadedResume = null;
+
+        // Modal functions (only for upload modal)
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageElement = document.getElementById('notification-message');
+            
+            messageElement.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // File upload handling
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                uploadedResume = file;
+                showNotification(`Resume "${file.name}" uploaded successfully!`);
+                closeModal('upload-modal');
+                document.getElementById("filename").innerHTML=`Uploaded File: ${file.name}`;
+                document.getElementById("filename").style.display="block";
+            }
+        }
+
+        // Drag and drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            if (uploadArea) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, highlight, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, unhighlight, false);
+                });
+
+                function highlight(e) {
+                    uploadArea.classList.add('dragover');
+                }
+
+                function unhighlight(e) {
+                    uploadArea.classList.remove('dragover');
+                }
+
+                uploadArea.addEventListener('drop', handleDrop, false);
+
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (files.length > 0) {
+                        handleFileUpload({files: files});
+                    }
+                }
+            }
+        });
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const targetTab = document.getElementById(tabName);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            currentTab = tabName;
+        }
+
+        // Dashboard functions
+        function updateDashboardMetrics() {
+            // Simulate real-time updates
+            const metrics = ['match-score', 'applications', 'interviews', 'skills'];
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric);
+                if (element) {
+                    let currentValue = parseInt(element.textContent);
+                    let increment = Math.floor(Math.random() * 5) + 1;
+                    element.textContent = (currentValue + increment) + (metric === 'match-score' ? '%' : '');
+                }
+            });
+        }
+
+        // Initialize animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate feature cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Update progress bars with animation
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 1000);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Auto-update dashboard metrics every 30 seconds
+        setInterval(updateDashboardMetrics, 30000);
+
+        // Initialize with sample data
+        setTimeout(() => {
+            if (Math.random() > 0.5) {
+                showNotification('Welcome! Upload your resume to get started.', 'warning');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
