@@ -31,5 +31,9 @@ def jdParserApi():
 def resumeRankingPredictor():
     return render_template('resumeRankingPredictor.html')
 
+@app.route('/skillGap')
+def skillGap():
+    return render_template('skillGap.html')
+
 if __name__=='__main__':
     app.run(debug=True)
