@@ -1,6 +1,6 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
-import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator
+import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator
 import json
 
 with open("config.json") as f:
@@ -85,6 +85,13 @@ def resumeRankingApi():
 @app.route('/atsSimulator')
 def atsSimulator():
     return render_template('atsSimulator.html')
+
+@app.route("/api/atsSimulator",methods=["POST"])
+def apiAtsSimulator():
+    userData=request.get_json()
+    userInput=userData.get("jobDescription")
+    atsData=atsSimulatorGenerator.atsScoreGenerator(userInput)
+    return jsonify({"atsData":atsData})
 
 if __name__=='__main__':
     app.run(debug=True)

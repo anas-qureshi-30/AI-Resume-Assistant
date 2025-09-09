@@ -33,18 +33,6 @@
         <div class="container">
             <!-- Resume Status & Job Description Input -->
             <div class="ats-setup-section">
-                <div class="resume-status-card">
-                    <div class="status-header">
-                        <h3>📄 Resume Status</h3>
-                        <div class="status-indicator" id="resume-status">
-                            <span class="status-dot error"></span>
-                            <span>No resume uploaded</span>
-                        </div>
-                    </div>
-                    <p id="resume-info">Please upload a resume on the homepage first.</p>
-                    <button class="btn-secondary" onclick="window.location.href='/'">Upload Resume</button>
-                </div>
-
                 <div class="job-description-card">
                     <h3>🎯 Target Job Description</h3>
                     <p>Paste the job description to analyze keyword matching</p>
@@ -56,7 +44,7 @@
                     <div class="jd-actions">
                         <button class="btn-primary" onclick="runATSAnalysis()" id="analyze-btn">
                             <span class="btn-text">Run ATS Analysis</span>
-                            <span class="loading" style="display: none;"></span>
+                            <span class="loading" style="display: none;">⌛</span>
                         </button>
                         <button class="btn-outline" onclick="loadSampleJD()">Load Sample JD</button>
                     </div>
@@ -218,7 +206,6 @@
     <script>
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            checkResumeStatus();
             initializeATS();
         });
     </script>

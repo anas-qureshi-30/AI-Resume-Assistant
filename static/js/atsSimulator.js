@@ -5,101 +5,6 @@ let currentResumeData = null;
 let atsAnalysisResults = null;
 let currentResultTab = 'passed';
 
-// Mock data for demonstration
-const mockATSData = {
-    scores: {
-        overall: 78,
-        keywords: 65,
-        formatting: 90,
-        structure: 85,
-        content: 72
-    },
-    passedChecks: [
-        {
-            title: "Standard Section Headers",
-            description: "Resume uses recognized section titles like 'Experience', 'Education', 'Skills'"
-        },
-        {
-            title: "Clean File Format", 
-            description: "PDF format is ATS-friendly and maintains formatting across systems"
-        },
-        {
-            title: "Consistent Date Formatting",
-            description: "All dates follow MM/YYYY format throughout the resume"
-        },
-        {
-            title: "Contact Information Present",
-            description: "Email, phone number, and location are clearly visible"
-        },
-        {
-            title: "No Tables or Text Boxes",
-            description: "Content is in simple text format, avoiding complex layouts"
-        },
-        {
-            title: "Standard Font Usage",
-            description: "Uses ATS-friendly fonts like Arial, Calibri, or Times New Roman"
-        }
-    ],
-    issues: [
-        {
-            severity: "high",
-            title: "Missing Action Verbs",
-            description: "Many bullet points don't start with strong action verbs that ATS systems look for",
-            impact: "Reduces keyword matching and impact scoring"
-        },
-        {
-            severity: "medium", 
-            title: "Inconsistent Bullet Points",
-            description: "Mix of different bullet point styles may confuse parsing algorithms",
-            impact: "Could cause section content to be misinterpreted"
-        },
-        {
-            severity: "high",
-            title: "Lack of Quantified Achievements",
-            description: "Most accomplishments lack specific numbers, percentages, or metrics",
-            impact: "ATS systems and recruiters look for measurable results"
-        },
-        {
-            severity: "medium",
-            title: "Skills Section Format",
-            description: "Skills are grouped in categories rather than listed individually",
-            impact: "May reduce individual keyword matching scores"
-        }
-    ],
-    suggestions: [
-        {
-            priority: "high",
-            title: "Add Quantified Metrics",
-            description: "Include specific numbers: 'Increased sales by 25%' instead of 'Improved sales performance'",
-            example: "Instead of: 'Managed team projects'\nTry: 'Managed 5 cross-functional team projects, delivering 100% on time'"
-        },
-        {
-            priority: "high",
-            title: "Use Job-Specific Keywords",
-            description: "Incorporate exact keywords from the job description naturally throughout your resume",
-            example: "If JD mentions 'agile methodologies', use this exact phrase instead of 'agile practices'"
-        },
-        {
-            priority: "medium",
-            title: "Standardize Bullet Points", 
-            description: "Use consistent bullet point symbols (•) and formatting throughout all sections",
-            example: "Replace dashes, arrows, or mixed symbols with standard round bullets"
-        },
-        {
-            priority: "medium",
-            title: "Expand Skills Section",
-            description: "List technical skills individually rather than grouping them",
-            example: "Instead of: 'Languages: Python, Java, JavaScript'\nTry: Individual lines for Python, Java, JavaScript"
-        },
-        {
-            priority: "low",
-            title: "Add Certifications Section",
-            description: "Create a dedicated section for relevant certifications and licenses",
-            example: "Include certification names, issuing organizations, and dates"
-        }
-    ]
-};
-
 const sampleJobDescription = `Senior Software Engineer - Full Stack
 
 We are seeking an experienced Senior Software Engineer to join our growing development team. The ideal candidate will have 5+ years of experience building scalable web applications using modern technologies.
@@ -130,8 +35,6 @@ Responsibilities:
 
 // Initialize ATS Simulator
 function initializeATS() {
-    // Check if we have resume data from localStorage or session
-    checkResumeStatus();
     
     // Set up event listeners
     setupEventListeners();
@@ -143,7 +46,7 @@ function setupEventListeners() {
     if (jobDescTextarea) {
         jobDescTextarea.addEventListener('input', function() {
             const analyzeBtn = document.getElementById('analyze-btn');
-            if (this.value.trim().length > 50 && hasResumeData()) {
+            if (this.value.trim().length > 50) {
                 analyzeBtn.disabled = false;
                 analyzeBtn.classList.remove('disabled');
             } else {
@@ -152,45 +55,6 @@ function setupEventListeners() {
             }
         });
     }
-}
-
-// Check resume status
-function checkResumeStatus() {
-    // Mock check for uploaded resume - in real implementation, this would check server/localStorage
-    const mockResumeUploaded = Math.random() > 0.3; // 70% chance of having resume
-    
-    const statusIndicator = document.getElementById('resume-status');
-    const resumeInfo = document.getElementById('resume-info');
-    
-    if (mockResumeUploaded) {
-        // Simulate having an uploaded resume
-        currentResumeData = {
-            filename: 'john_doe_resume.pdf',
-            uploadDate: new Date(),
-            content: 'Mock resume content for ATS analysis'
-        };
-        
-        statusIndicator.innerHTML = '<span class="status-dot success"></span><span>Resume Ready</span>';
-        statusIndicator.className = 'status-indicator success';
-        resumeInfo.textContent = `Resume: ${currentResumeData.filename} (uploaded ${formatDate(currentResumeData.uploadDate)})`;
-    } else {
-        statusIndicator.innerHTML = '<span class="status-dot error"></span><span>No resume uploaded</span>';
-        statusIndicator.className = 'status-indicator error';
-        resumeInfo.textContent = 'Please upload a resume on the homepage first.';
-    }
-}
-
-function hasResumeData() {
-    return currentResumeData !== null;
-}
-
-function formatDate(date) {
-    return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
 }
 
 // Load sample job description
@@ -206,11 +70,6 @@ function loadSampleJD() {
 
 // Main ATS Analysis Function
 async function runATSAnalysis() {
-    if (!hasResumeData()) {
-        showNotification('Please upload a resume first!', 'error');
-        return;
-    }
-    
     const jobDescription = document.getElementById('job-description').value.trim();
     if (jobDescription.length < 50) {
         showNotification('Please provide a more detailed job description!', 'warning');
@@ -221,21 +80,24 @@ async function runATSAnalysis() {
     setAnalysisLoading(true);
     
     try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        
-        // Generate mock results based on job description
-        atsAnalysisResults = await generateATSResults(jobDescription);
-        
+        const respone=await fetch('/api/atsSimulator',{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({"jobDescription":jobDescription})
+        })
+        const data= await respone.json()
+        atsAnalysisResults = data.atsData;
+        console.log(atsAnalysisResults)
         // Display results
         displayATSResults();
-        
-        showNotification('ATS analysis completed successfully!', 'success');
-        
+    
     } catch (error) {
         console.error('ATS Analysis Error:', error);
         showNotification('Analysis failed. Please try again.', 'error');
     } finally {
+        showNotification('ATS analysis completed successfully!', 'success');
         setAnalysisLoading(false);
     }
 }
@@ -258,70 +120,6 @@ function setAnalysisLoading(isLoading) {
     }
 }
 
-// Generate ATS results based on job description
-async function generateATSResults(jobDescription) {
-    // Extract keywords from job description
-    const extractedKeywords = extractKeywordsFromJD(jobDescription);
-    
-    // Create dynamic results based on the job description
-    const results = {
-        ...mockATSData,
-        jobDescription: jobDescription,
-        extractedKeywords: extractedKeywords,
-        foundKeywords: generateFoundKeywords(extractedKeywords),
-        missingKeywords: generateMissingKeywords(extractedKeywords)
-    };
-    
-    // Adjust scores based on keyword matching
-    const keywordMatchRatio = results.foundKeywords.length / extractedKeywords.length;
-    results.scores.keywords = Math.round(keywordMatchRatio * 100);
-    results.scores.overall = Math.round(
-        (results.scores.keywords * 0.4 + 
-         results.scores.formatting * 0.2 + 
-         results.scores.structure * 0.2 + 
-         results.scores.content * 0.2)
-    );
-    
-    return results;
-}
-
-function extractKeywordsFromJD(jobDescription) {
-    // Simple keyword extraction - in real implementation, this would be more sophisticated
-    const commonTechKeywords = [
-        'python', 'javascript', 'react', 'aws', 'docker', 'kubernetes', 
-        'postgresql', 'mongodb', 'agile', 'ci/cd', 'microservices',
-        'machine learning', 'devops', 'git', 'rest api', 'sql',
-        'node.js', 'angular', 'vue.js', 'azure', 'gcp', 'jenkins'
-    ];
-    
-    const jobDescLower = jobDescription.toLowerCase();
-    const foundKeywords = commonTechKeywords.filter(keyword => 
-        jobDescLower.includes(keyword)
-    );
-    
-    // Add some job-specific keywords based on content
-    if (jobDescLower.includes('senior') || jobDescLower.includes('lead')) {
-        foundKeywords.push('leadership', 'mentoring');
-    }
-    if (jobDescLower.includes('full stack') || jobDescLower.includes('fullstack')) {
-        foundKeywords.push('full-stack development');
-    }
-    
-    return foundKeywords;
-}
-
-function generateFoundKeywords(allKeywords) {
-    // Simulate that we found 60-80% of keywords
-    const foundRatio = 0.6 + Math.random() * 0.2;
-    const foundCount = Math.floor(allKeywords.length * foundRatio);
-    
-    return allKeywords.slice(0, foundCount);
-}
-
-function generateMissingKeywords(allKeywords) {
-    const foundKeywords = generateFoundKeywords(allKeywords);
-    return allKeywords.filter(keyword => !foundKeywords.includes(keyword));
-}
 
 // Display ATS Results
 function displayATSResults() {
@@ -351,7 +149,7 @@ function displayATSResults() {
 }
 
 function updateScoreVisualization() {
-    const scores = atsAnalysisResults.scores;
+    const scores = atsAnalysisResults.score;
     
     // Update main score with animation
     animateScore('ats-score', scores.overall);
@@ -448,7 +246,7 @@ function updateResultsContent() {
 
 function updatePassedChecks() {
     const container = document.getElementById('passed-checks');
-    const checks = atsAnalysisResults.passedChecks;
+    const checks = atsAnalysisResults.passedATSChecks;
     
     container.innerHTML = checks.map(check => `
         <div class="check-item">
@@ -505,18 +303,18 @@ function updateKeywordsAnalysis() {
     const missingContainer = document.getElementById('missing-keywords');
     
     // Found keywords
-    foundContainer.innerHTML = atsAnalysisResults.foundKeywords.map(keyword => 
+    foundContainer.innerHTML = atsAnalysisResults.keywords.found.map(keyword => 
         `<span class="keyword-tag keyword-found">${keyword}</span>`
     ).join('');
     
     // Missing keywords
-    missingContainer.innerHTML = atsAnalysisResults.missingKeywords.map(keyword => 
+    missingContainer.innerHTML = atsAnalysisResults.keywords.missing.map(keyword => 
         `<span class="keyword-tag keyword-missing">${keyword}</span>`
     ).join('');
 }
 
 function updateTabCounts() {
-    document.getElementById('passed-count').textContent = atsAnalysisResults.passedChecks.length;
+    document.getElementById('passed-count').textContent = atsAnalysisResults.passedATSChecks.length;
     document.getElementById('issues-count').textContent = atsAnalysisResults.issues.length;
     document.getElementById('suggestions-count').textContent = atsAnalysisResults.suggestions.length;
 }

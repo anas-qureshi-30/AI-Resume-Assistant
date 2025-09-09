@@ -48,65 +48,17 @@
 /* Setup Section */
 .ats-setup-section {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-bottom: 3rem;
 }
 
-.resume-status-card,
 .job-description-card {
     background: white;
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: var(--shadow);
     border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.status-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-
-.status-dot.success {
-    background: var(--success);
-}
-
-.status-dot.error {
-    background: var(--danger);
-}
-
-.status-dot.warning {
-    background: var(--warning);
-}
-
-.status-indicator.success {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.status-indicator.error {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .job-description-card h3 {
