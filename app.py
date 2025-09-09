@@ -1,6 +1,6 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
-import templateGenerator,compareResume,resumeRanking,skillGap
+import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator
 import json
 
 with open("config.json") as f:
@@ -29,8 +29,8 @@ def fileInput():
     return render_template("homePage.html")
         
 
-@app.route("/generator")
-def generator():
+@app.route("/templateGenerator")
+def tempGenerator():
     return render_template("templateGenerator.html")
 
 @app.route("/api/templateGeneratorAI",methods=["POST"])
@@ -38,6 +38,17 @@ def aiTemplateGenerator():
     userInput=request.get_json()
     aiGeneratedTemplate=templateGenerator.generateTemplate(userInput.get("jobDescription"))
     return jsonify({"result":aiGeneratedTemplate})
+
+@app.route("/resumeGenerator")
+def resumeGen():
+    return render_template("resumeGenerator.html")
+
+@app.route("/api/resumeGenerator",methods=["POST"])
+def aiResumeGenerator():
+    userInput=request.get_json()
+    userData=userInput.get("resumeData")
+    aiResponse=resumeGenerator.aiResumeGenerator(userData)
+    return jsonify({"aiResponse":aiResponse})
 
 @app.route('/jdParser')
 def jdParser():
