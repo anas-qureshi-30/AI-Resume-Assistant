@@ -21,14 +21,22 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-function handleFileUpload(input) {
+async function handleFileUpload(input) {
     const file = input.files[0];
     if (file) {
         uploadedResume = file;
-        showNotification(`Resume "${file.name}" uploaded successfully!`);
-        closeModal('upload-modal');
-        document.getElementById("filename").innerHTML = `Uploaded File: ${file.name}`;
-        document.getElementById("filename").style.display = "block";
+        const formData = new FormData()
+        formData.append("resume", uploadedResume)
+        await fetch("/resumeInput", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(closeModal('upload-modal'),
+                showNotification(`Resume "${file.name}" uploaded successfully!`),
+                document.getElementById("filename").innerHTML = `Uploaded File: ${file.name}`,
+                document.getElementById("filename").style.display = "block"
+            )
     }
 }
 

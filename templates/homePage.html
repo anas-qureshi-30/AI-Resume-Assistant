@@ -272,7 +272,9 @@
                 <div class="upload-icon">📄</div>
                 <h3>Drop your resume here or click to browse</h3>
                 <p>Supports PDF, DOCX formats</p>
-                <input type="file" id="resume-file" style="display: none;" accept=".pdf,.docx" onchange="handleFileUpload(this)">
+                <form action="/resumeInput" method="POST" enctype="multipart/form-data" id="fileForm">
+                    <input type="file" id="resume-file" style="display: none;" accept=".pdf,.docx" onchange="handleFileUpload(this)">
+                </form>
             </div>
         </div>
     </div>

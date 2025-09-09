@@ -1,10 +1,11 @@
 import google.generativeai as gemini
 from docx import Document
 import json
+from flask import session
 def rankResume():
     with open("config.json") as f:
         config=json.load(f)
-    file=Document("C:\\Users\\saymaqureshi27\\Desktop\\Project's\\AI Resume Assistant\\RESUME.docx")
+    file=Document(session["file_path"])
     text=""
     for para in file.paragraphs:
         text=text+para.text

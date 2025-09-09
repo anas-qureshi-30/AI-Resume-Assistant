@@ -1,11 +1,33 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
 import templateGenerator,compareResume,resumeRanking,skillGap
+import json
+
+with open("config.json") as f:
+    config=json.load(f)
+
 app=Flask(__name__)
+app.secret_key=config["SECRET_KEY"]
+
+UPLOADED_RESUME_FOLDER='./uploadedResumeFolder'
+app.config["UPLOADED_RESUME_FOLDER"]=UPLOADED_RESUME_FOLDER
+os.makedirs(UPLOADED_RESUME_FOLDER,exist_ok=True)
 
 @app.route("/")
 def homePage():
     return render_template("homePage.html")
+
+@app.route('/resumeInput',methods=["POST","GET"])
+def fileInput():
+    if request.method=="POST":
+        file=request.files["resume"]
+        if file:
+            file_path = os.path.join(app.config['UPLOADED_RESUME_FOLDER'], file.filename)
+            file.save(file_path)
+            session['file_path'] = file_path
+            return render_template("homePage.html")        
+    return render_template("homePage.html")
+        
 
 @app.route("/generator")
 def generator():

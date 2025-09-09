@@ -1,10 +1,11 @@
 import google.generativeai as gemini
 from docx import Document
 import json
+from flask import session
 def skillGapOutput(targetRole,experienceLevel):
     with open("config.json") as f:
         config=json.load(f)
-    file=Document("C:\\Users\\saymaqureshi27\\Desktop\\Project's\\AI Resume Assistant\\RESUME.docx")
+    file=Document(session["file_path"])
     text=""
     for para in file.paragraphs:
         text=text+para.text
@@ -44,10 +45,11 @@ def skillGapOutput(targetRole,experienceLevel):
     Rules:
     1. 'missingSkills_count' is the number of missing skills.
     2. 'recommendedCourses' must always be 2× the missing skills.
-    3. 'estimatedCompletionTime' should be realistic based on missing skills and resources.
+    3. 'estimatedCompletionTime' should be realistic based on missing skills and resources and must be valid.
     4. 'skillsMatchPercentage' must be between 0 and 100.
     5. Each missing skill must have 1-3 study materials with real working URLs.
-    6. Do not include any explanation or formatting outside of JSON."
+    6. Do not include any explanation or formatting outside of JSON.
+    7. Price of course must be real and must be in indian rupees."
     """+"user resume: "+text+ " user targetRole "+targetRole+" user experience level"+experienceLevel)
 
     output=json.loads(response.text)
