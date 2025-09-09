@@ -82,5 +82,9 @@ def resumeRankingApi():
     rankingdata=resumeRanking.rankResume()
     return jsonify({"rankingdata":rankingdata})
 
+@app.route('/atsSimulator')
+def atsSimulator():
+    return render_template('atsSimulator.html')
+
 if __name__=='__main__':
     app.run(debug=True)

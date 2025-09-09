@@ -1,0 +1,574 @@
+/* ATS Simulator Specific Styles */
+
+.ats-hero {
+    padding: 8rem 2rem 3rem;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.ats-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+}
+
+.ats-hero .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.ats-hero h1 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.ats-hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Main ATS Section */
+.ats-main {
+    padding: 4rem 2rem;
+    background: var(--light-gray);
+    min-height: 100vh;
+}
+
+/* Setup Section */
+.ats-setup-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.resume-status-card,
+.job-description-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.success {
+    background: var(--success);
+}
+
+.status-dot.error {
+    background: var(--danger);
+}
+
+.status-dot.warning {
+    background: var(--warning);
+}
+
+.status-indicator.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-indicator.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.job-description-card h3 {
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.job-description-card p {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
+#job-description {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+#job-description:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.jd-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ATS Score Section */
+.ats-score-section {
+    margin-bottom: 3rem;
+}
+
+.score-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.score-header h2 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.score-header p {
+    color: var(--gray);
+    margin-bottom: 2rem;
+}
+
+.score-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    margin-bottom: 2rem;
+}
+
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) 0deg, var(--primary) var(--score-angle, 0deg), #e5e7eb var(--score-angle, 0deg));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-circle::before {
+    content: '';
+    width: 110px;
+    height: 110px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.score-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    z-index: 1;
+}
+
+.score-label {
+    font-size: 1rem;
+    color: var(--gray);
+    z-index: 1;
+}
+
+.score-details {
+    flex: 1;
+    max-width: 400px;
+}
+
+.score-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.breakdown-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.breakdown-label {
+    min-width: 80px;
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 0.9rem;
+}
+
+.breakdown-bar {
+    flex: 1;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.breakdown-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 1s ease;
+    border-radius: 4px;
+}
+
+.breakdown-value {
+    min-width: 35px;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.score-interpretation {
+    padding: 1.5rem;
+    background: var(--light-gray);
+    border-radius: 0.75rem;
+    margin-top: 2rem;
+}
+
+.interpretation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.interpretation-icon {
+    font-size: 1.5rem;
+}
+
+.interpretation-text strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.interpretation-text p {
+    color: var(--gray);
+    margin: 0;
+}
+
+/* Results Section */
+.ats-results {
+    margin-bottom: 3rem;
+}
+
+.results-tabs {
+    display: flex;
+    background: white;
+    border-radius: 0.75rem;
+    padding: 0.25rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.analysis-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.analysis-card h3 {
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+    font-size: 1.3rem;
+}
+
+/* Check Items */
+.check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid var(--success);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.check-icon {
+    font-size: 1.2rem;
+    margin-top: 0.1rem;
+}
+
+.check-content h4 {
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.check-content p {
+    color: var(--gray);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Issue Items */
+.issue-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid var(--danger);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.issue-severity {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.severity-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.severity-medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.severity-low {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+}
+
+/* Suggestion Items */
+.suggestion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.suggestion-priority {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.priority-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.priority-medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.priority-low {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+/* Keywords Analysis */
+.keywords-analysis {
+    display: grid;
+    gap: 2rem;
+}
+
+.keywords-section h4 {
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.keywords-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.keyword-tag {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.keyword-found {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.keyword-missing {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Actions Section */
+.ats-actions {
+    text-align: center;
+}
+
+.actions-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.actions-card h3 {
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Loading States */
+.btn-primary .loading {
+    margin-left: 0.5rem;
+}
+
+.btn-primary.loading .btn-text {
+    opacity: 0.7;
+}
+
+/* Animations */
+@keyframes scoreAnimation {
+    from { --score-angle: 0deg; }
+    to { --score-angle: var(--final-angle); }
+}
+
+.score-circle.animate {
+    animation: scoreAnimation 2s ease-out forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .score-visual {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .score-details {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .ats-setup-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        text-align: left;
+        padding: 1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-buttons .btn-primary,
+    .action-buttons .btn-secondary,
+    .action-buttons .btn-outline {
+        width: 100%;
+        max-width: 300px;
+    }
+}
