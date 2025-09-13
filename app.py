@@ -93,5 +93,9 @@ def apiAtsSimulator():
     atsData=atsSimulatorGenerator.atsScoreGenerator(userInput)
     return jsonify({"atsData":atsData})
 
+@app.route('/aiInterview')
+def aiInterview():
+    return render_template('aiInterview.html')
+
 if __name__=='__main__':
     app.run(debug=True)

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Readiness Report</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/homePage.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/aiInterview.css')}}">
+    <script src="{{url_for('static',filename='js/homePage.js')}}"></script>
+    <script src="{{url_for('static',filename='js/aiInterview.js')}}"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI Resume Assistant</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="#" class="active">Interview Prep</a></li>
+                <li><a href="/atsSimulator">ATS Simulator</a></li>
+                <li><a href="/generator">Generator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI Interview Readiness Report</h1>
+            <p>Get personalized interview questions and practice scenarios based on your target role</p>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="resume-status">
+                    <h3>Resume Status</h3>
+                    <div class="status-indicator" id="resume-status">
+                        <span class="status-dot success"></span>
+                        <span>Resume Ready</span>
+                    </div>
+                    <p id="resume-info">Using uploaded resume: john_doe_resume.pdf</p>
+                </div>
+
+                <div class="job-description-input">
+                    <h2>Target Job Description</h2>
+                    <p>Paste the job description to generate tailored interview questions</p>
+                    <textarea 
+                        id="job-description" 
+                        placeholder="Paste the complete job description here...
+
+Example:
+We are seeking a Senior Software Engineer with 5+ years of experience in Python, React, and cloud technologies. The candidate will lead development teams and architect scalable solutions..."
+                        rows="12"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="btn-primary" onclick="generateReport()" id="generate-btn">
+                            <span class="btn-text">Generate Report</span>
+                            <span class="loading" style="display: none;"></span>
+                        </button>
+                        <button class="btn-secondary" onclick="loadSampleJD()">Load Sample</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section" style="display: none;">
+                <!-- Interview Questions Section -->
+                <div class="report-card" id="interview-questions-section">
+                    <div class="card-header">
+                        <h2>Likely Interview Questions</h2>
+                        <span class="question-count" id="question-count">0 questions</span>
+                    </div>
+                    <p class="card-description">AI-predicted questions based on your resume and job requirements</p>
+                    
+                    <div class="questions-container" id="questions-container">
+                        <!-- Dynamic questions will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Mock Interview Section -->
+                <div class="report-card" id="mock-interview-section">
+                    <div class="card-header">
+                        <h2>Mock Interview Q&A</h2>
+                        <span class="qa-count" id="qa-count">0 practice sets</span>
+                    </div>
+                    <p class="card-description">Practice questions with suggested answers tailored to your profile</p>
+                    
+                    <div class="mock-interview-container" id="mock-interview-container">
+                        <!-- Dynamic Q&A will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-section">
+                    <div class="action-buttons">
+                        <button class="btn-primary" onclick="downloadReport()">
+                            Download Report
+                        </button>
+                        <button class="btn-secondary" onclick="generateNewReport()">
+                            Generate New Report
+                        </button>
+                        <button class="btn-outline" onclick="shareReport()">
+                            Share Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notification-message"></div>
+    </div>
+
+
+</body>
+</html>
