@@ -1,29 +1,30 @@
 import google.generativeai as gemini
-from docx import Document
 import json
 from flask import session
+import zipfile
+
 def atsScoreGenerator(userJobDescription):
     with open("config.json") as f:
         config=json.load(f)
-    file=Document(session["file_path"])
+    file=session["file_path"]
     text=""
-    for para in file.paragraphs:
-        text=text+para.text
+    with zipfile.ZipFile(file) as resume:
+        text=resume.read("word/document.xml").decode("utf-8")
     gemini.configure(api_key=config["GOOGLE_API"])
     model=gemini.GenerativeModel("models/gemini-1.5-flash")
     response=model.generate_content("""
-    You are an ATS (Applicant Tracking System) simulation engine.  
-    The user will provide two inputs:  
-    1. A resume (in text or structured JSON form).  
-    2. A target job description.  
+    You are an ATS (Applicant Tracking System) simulation engine.
+    The user will provide two inputs:
+    1. A resume in WordprocessingML (DOCX XML format).
+    2. A target job description in plain text. 
 
-    Your task is to analyze the resume against the job description and generate the ATS results return **only JSON output**.
-    **Strictly to not include Following Things**:
-    -no explanations
-    -no text
-    -no json fences at starting and ending of output.  
+    Your Task
+        Analyze the resume against the job description and generate the ATS evaluation. You must:
+        Treat XML tags as formatting markers (e.g., <w:b> = bold, <w:p> = paragraph, <w:tbl> = table).
+        Extract and analyze text content for keyword and content checks.
+        Check formatting consistency using XML tags (headings, bold, tables, bullet points).
 
-    The JSON must strictly follow this structure:  
+    Return only JSON output in the following structure:
 
     {
     "score": {
@@ -69,8 +70,7 @@ def atsScoreGenerator(userJobDescription):
     - If no issues are found, return empty arrays for "issues" and "suggestions".  
     - Do not output anything outside of the JSON object.  
 
-    User Resume: """+ userJobDescription)
-    print(response)
+    JobDescription: """+ userJobDescription+" User Resume: "+text)
     cleaned = response.text.strip()
     if cleaned.startswith("```json"):
         cleaned = cleaned[len("```json"):].strip()
@@ -78,6 +78,4 @@ def atsScoreGenerator(userJobDescription):
         cleaned = cleaned[:-3].strip()
 
     output = json.loads(cleaned)
-
-    print(output)
     return output

@@ -29,6 +29,7 @@ def aiResumeGenerator(userData):
     - Achievements
     - Additional Information
     11. The final output must contain ONLY the <div> block with inline CSS and its nested content. Do not include <html>, <head>, <body>, or code fences.
+    12. The resume must successfully pass the ats check, you can add the keywords required to make resume 100 percent prefect, but you cannot add any personal information of user by yourself 
 
     User Input (JSON): """+json.dumps(userData))
 

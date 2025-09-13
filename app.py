@@ -2,6 +2,8 @@ from flask import Flask,render_template,jsonify, request,session
 import os
 import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator
 import json
+import pypandoc
+import io
 
 with open("config.json") as f:
     config=json.load(f)
@@ -93,9 +95,16 @@ def apiAtsSimulator():
     atsData=atsSimulatorGenerator.atsScoreGenerator(userInput)
     return jsonify({"atsData":atsData})
 
-@app.route('/aiInterview')
-def aiInterview():
-    return render_template('aiInterview.html')
-
+@app.route("/wordDownload",methods=["POST"])
+def downloadWOrd():
+    data=request.get_json()
+    print("here")
+    pypandoc.convert_text(data.get("htlmCode"),
+        "docx",
+        format="html",
+        outputfile="output.docx",
+        extra_args=["--standalone"]
+    )
+    return jsonify({"result":"true"})
 if __name__=='__main__':
     app.run(debug=True)

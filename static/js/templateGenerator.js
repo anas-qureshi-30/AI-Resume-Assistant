@@ -60,6 +60,8 @@ async function displayTemplate() {
     const output = data.result
     console.log(output)
     resumeTemplate.innerHTML = output;
+    console.log(resumeTemplate.textContent)
+    console.log(resumeTemplate.innerHTML)
     resultSection.classList.add('active');
 }
 
@@ -70,18 +72,21 @@ function copyTemplate() {
     });
 }
 
-function downloadTemplate() {
-    const template = document.getElementById('resume-template').innerText;
-    const blob = new Blob([template], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resume-template.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-    showNotification('Template downloaded successfully!');
+async function downloadTemplate() {
+    const template = document.getElementById('resume-template').innerHTML;
+    const response=await fetch("/wordDownload",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({"htlmCode":template})
+    })
+    const data=await response
+    if(data.result=="true"){
+       showNotification('Template downloaded successfully!'); 
+    }else{
+        showNotification('Error downloaded template!');
+    }
 }
 
 function editTemplate() {

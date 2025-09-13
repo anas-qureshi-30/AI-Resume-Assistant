@@ -14,5 +14,7 @@ def generateTemplate(userDescription):
     "4. The HTML must be properly structured, styled, and ready to use as a template. "
     "5. If the user asks for anything else that is not a resume template request, respond only with: 'Sorry, I am built to generate resume templates only.' "
     "6. Output must always be ONLY the raw HTML code without any extra text. "
+    "7. Template must be like that resume must clear ats check easily."
+    "8. Html code must not have title tag it must be without <title></title> tag"
     "User input: " + userDescription)
     return response.text

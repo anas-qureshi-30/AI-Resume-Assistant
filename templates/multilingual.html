@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual Resume Transformer - AI Resume Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #fff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo::before {
+            content: "🌍";
+            font-size: 1.8rem;
+        }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 8rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #f0f9ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .transformer-container {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .transformer-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .transformer-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .transformer-body {
+            padding: 3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .form-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .language-option {
+            position: relative;
+        }
+
+        .language-radio {
+            display: none;
+        }
+
+        .language-label {
+            display: block;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .language-label:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .language-radio:checked + .language-label {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .language-flag {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .region-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .region-option {
+            position: relative;
+        }
+
+        .region-radio {
+            display: none;
+        }
+
+        .region-label {
+            display: block;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .region-label:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .region-radio:checked + .region-label {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .region-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .region-desc {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .transform-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .transform-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .transform-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .preview-section {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        .preview-header {
+            background: var(--success);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .preview-body {
+            padding: 2rem;
+        }
+
+        .preview-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .preview-column {
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .preview-column h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .preview-content {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .download-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--light-gray);
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .download-btn {
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--success);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .language-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .region-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Multilingual Resume Transformer</div>
+            <a href="/" class="back-btn">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Transform Your Resume Globally</h1>
+            <p>Adapt your resume for international markets with localized formatting and cultural considerations</p>
+        </div>
+
+        <div class="transformer-container">
+            <div class="transformer-header">
+                <h2>🌍 International Resume Adaptation</h2>
+                <p>Your uploaded resume will be transformed based on your selections</p>
+            </div>
+
+            <div class="transformer-body">
+                <form id="transformForm">
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>🗣️ Target Language</h3>
+                            <div class="language-grid">
+                                <div class="language-option">
+                                    <input type="radio" id="lang-spanish" name="language" value="spanish" class="language-radio">
+                                    <label for="lang-spanish" class="language-label">
+                                        <span class="language-flag">🇪🇸</span>
+                                        Spanish
+                                    </label>
+                                </div>
+                                <div class="language-option">
+                                    <input type="radio" id="lang-french" name="language" value="french" class="language-radio">
+                                    <label for="lang-french" class="language-label">
+                                        <span class="language-flag">🇫🇷</span>
+                                        French
+                                    </label>
+                                </div>
+                                <div class="language-option">
+                                    <input type="radio" id="lang-german" name="language" value="german" class="language-radio">
+                                    <label for="lang-german" class="language-label">
+                                        <span class="language-flag">🇩🇪</span>
+                                        German
+                                    </label>
+                                </div>
+                                <div class="language-option">
+                                    <input type="radio" id="lang-portuguese" name="language" value="portuguese" class="language-radio">
+                                    <label for="lang-portuguese" class="language-label">
+                                        <span class="language-flag">🇧🇷</span>
+                                        Portuguese
+                                    </label>
+                                </div>
+                                <div class="language-option">
+                                    <input type="radio" id="lang-italian" name="language" value="italian" class="language-radio">
+                                    <label for="lang-italian" class="language-label">
+                                        <span class="language-flag">🇮🇹</span>
+                                        Italian
+                                    </label>
+                                </div>
+                                <div class="language-option">
+                                    <input type="radio" id="lang-mandarin" name="language" value="mandarin" class="language-radio">
+                                    <label for="lang-mandarin" class="language-label">
+                                        <span class="language-flag">🇨🇳</span>
+                                        Mandarin
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>📍 Target Region/Market</h3>
+                            <div class="region-grid">
+                                <div class="region-option">
+                                    <input type="radio" id="region-us" name="region" value="us" class="region-radio">
+                                    <label for="region-us" class="region-label">
+                                        <div class="region-title">🇺🇸 United States</div>
+                                        <div class="region-desc">Standard US format, skills-focused</div>
+                                    </label>
+                                </div>
+                                <div class="region-option">
+                                    <input type="radio" id="region-uk" name="region" value="uk" class="region-radio">
+                                    <label for="region-uk" class="region-label">
+                                        <div class="region-title">🇬🇧 United Kingdom</div>
+                                        <div class="region-desc">CV format, education emphasis</div>
+                                    </label>
+                                </div>
+                                <div class="region-option">
+                                    <input type="radio" id="region-eu" name="region" value="eu" class="region-radio">
+                                    <label for="region-eu" class="region-label">
+                                        <div class="region-title">🇪🇺 European Union</div>
+                                        <div class="region-desc">Europass style, detailed format</div>
+                                    </label>
+                                </div>
+                                <div class="region-option">
+                                    <input type="radio" id="region-asia" name="region" value="asia" class="region-radio">
+                                    <label for="region-asia" class="region-label">
+                                        <div class="region-title">🌏 Asia Pacific</div>
+                                        <div class="region-desc">Photo inclusion, hierarchical</div>
+                                    </label>
+                                </div>
+                                <div class="region-option">
+                                    <input type="radio" id="region-latam" name="region" value="latam" class="region-radio">
+                                    <label for="region-latam" class="region-label">
+                                        <div class="region-title">🌎 Latin America</div>
+                                        <div class="region-desc">Personal details, family status</div>
+                                    </label>
+                                </div>
+                                <div class="region-option">
+                                    <input type="radio" id="region-mena" name="region" value="mena" class="region-radio">
+                                    <label for="region-mena" class="region-label">
+                                        <div class="region-title">🌍 MENA Region</div>
+                                        <div class="region-desc">Cultural considerations, RTL support</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target-role">Target Job Title (Optional)</label>
+                        <input type="text" id="target-role" class="form-control" placeholder="e.g., Software Engineer, Marketing Manager">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additional-requirements">Additional Requirements (Optional)</label>
+                        <textarea id="additional-requirements" class="form-control" rows="3" placeholder="Any specific cultural adaptations, industry requirements, or formatting preferences..."></textarea>
+                    </div>
+
+                    <button type="submit" id="transformBtn" class="transform-btn">
+                        🚀 Transform Resume Internationally
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="preview-section" id="previewSection">
+            <div class="preview-header">
+                <h3>✅ Transformation Complete!</h3>
+                <p>Your resume has been successfully adapted for the international market</p>
+            </div>
+            <div class="preview-body">
+                <div class="preview-comparison">
+                    <div class="preview-column">
+                        <h4>Original Resume (English)</h4>
+                        <div class="preview-content" id="originalPreview">
+                            <strong>John Smith</strong><br>
+                            Software Engineer<br><br>
+                            
+                            <strong>EXPERIENCE:</strong><br>
+                            • Senior Developer at TechCorp (2020-2023)<br>
+                            • Built scalable web applications<br>
+                            • Led team of 5 developers<br><br>
+                            
+                            <strong>SKILLS:</strong><br>
+                            JavaScript, Python, React, Node.js<br><br>
+                            
+                            <strong>EDUCATION:</strong><br>
+                            BS Computer Science, MIT (2018)
+                        </div>
+                    </div>
+                    <div class="preview-column">
+                        <h4>Transformed Resume</h4>
+                        <div class="preview-content" id="transformedPreview">
+                            <!-- Transformed content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <h4>📥 Download Your Transformed Resume</h4>
+                    <p>Choose your preferred format for download</p>
+                    <button class="download-btn" onclick="downloadResume('pdf')">📄 Download PDF</button>
+                    <button class="download-btn" onclick="downloadResume('docx')">📝 Download DOCX</button>
+                    <button class="download-btn" onclick="downloadResume('txt')">📋 Download TXT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <div id="notification-message">Resume transformed successfully!</div>
+    </div>
+
+    <script>
+        let isTransforming = false;
+
+        // Sample transformed content for different languages/regions
+        const transformedContent = {
+            spanish: {
+                us: `<strong>Juan Smith</strong><br>
+Ingeniero de Software<br><br>
+
+<strong>EXPERIENCIA PROFESIONAL:</strong><br>
+• Desarrollador Senior en TechCorp (2020-2023)<br>
+• Desarrollé aplicaciones web escalables<br>
+• Lideré un equipo de 5 desarrolladores<br><br>
+
+<strong>HABILIDADES TÉCNICAS:</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>EDUCACIÓN:</strong><br>
+Licenciatura en Ciencias de la Computación, MIT (2018)`,
+                
+                eu: `<strong>Juan Smith</strong><br>
+Ingeniero de Software<br>
+📧 juan.smith@email.com | 📞 +1-555-0123<br><br>
+
+<strong>EXPERIENCIA PROFESIONAL:</strong><br>
+2020-2023: Desarrollador Senior<br>
+TechCorp, Estados Unidos<br>
+• Desarrollo de aplicaciones web escalables<br>
+• Liderazgo de equipo (5 desarrolladores)<br>
+• Implementación de mejores prácticas<br><br>
+
+<strong>COMPETENCIAS TÉCNICAS:</strong><br>
+• Lenguajes: JavaScript, Python<br>
+• Frameworks: React, Node.js<br>
+• Metodologías: Agile, Scrum<br><br>
+
+<strong>FORMACIÓN ACADÉMICA:</strong><br>
+2014-2018: Licenciatura en Ciencias de la Computación<br>
+Instituto Tecnológico de Massachusetts (MIT)`
+            },
+            
+            french: {
+                eu: `<strong>Jean Smith</strong><br>
+Ingénieur Logiciel<br>
+📧 jean.smith@email.com | 📞 +1-555-0123<br><br>
+
+<strong>EXPÉRIENCE PROFESSIONNELLE:</strong><br>
+2020-2023: Développeur Senior<br>
+TechCorp, États-Unis<br>
+• Développement d'applications web évolutives<br>
+• Direction d'équipe (5 développeurs)<br>
+• Mise en œuvre des meilleures pratiques<br><br>
+
+<strong>COMPÉTENCES TECHNIQUES:</strong><br>
+• Langages: JavaScript, Python<br>
+• Frameworks: React, Node.js<br>
+• Méthodologies: Agile, Scrum<br><br>
+
+<strong>FORMATION:</strong><br>
+2014-2018: Licence en Sciences Informatiques<br>
+Institut de Technologie du Massachusetts (MIT)`,
+                
+                us: `<strong>Jean Smith</strong><br>
+Ingénieur Logiciel<br><br>
+
+<strong>EXPÉRIENCE:</strong><br>
+• Développeur Senior chez TechCorp (2020-2023)<br>
+• Développement d'applications web évolutives<br>
+• Direction d'équipe de 5 développeurs<br><br>
+
+<strong>COMPÉTENCES:</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>ÉDUCATION:</strong><br>
+Licence Sciences Informatiques, MIT (2018)`
+            },
+            
+            german: {
+                eu: `<strong>Johann Smith</strong><br>
+Software-Ingenieur<br>
+📧 johann.smith@email.com | 📞 +1-555-0123<br>
+Geburtsdatum: 15.03.1995 | Nationalität: Amerikanisch<br><br>
+
+<strong>BERUFSERFAHRUNG:</strong><br>
+03/2020 - 12/2023: Senior Entwickler<br>
+TechCorp, USA<br>
+• Entwicklung skalierbarer Webanwendungen<br>
+• Teamführung (5 Entwickler)<br>
+• Implementierung von Best Practices<br><br>
+
+<strong>TECHNISCHE KOMPETENZEN:</strong><br>
+• Programmiersprachen: JavaScript, Python<br>
+• Frameworks: React, Node.js<br>
+• Methodiken: Agile, Scrum<br><br>
+
+<strong>AUSBILDUNG:</strong><br>
+2014-2018: Bachelor of Science Informatik<br>
+Massachusetts Institute of Technology (MIT)`,
+                
+                us: `<strong>Johann Smith</strong><br>
+Software-Ingenieur<br><br>
+
+<strong>BERUFSERFAHRUNG:</strong><br>
+• Senior Entwickler bei TechCorp (2020-2023)<br>
+• Entwicklung skalierbarer Webanwendungen<br>
+• Führung eines 5-köpfigen Entwicklerteams<br><br>
+
+<strong>FÄHIGKEITEN:</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>AUSBILDUNG:</strong><br>
+Bachelor Informatik, MIT (2018)`
+            }
+        };
+
+        document.getElementById('transformForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (isTransforming) return;
+            
+            const language = document.querySelector('input[name="language"]:checked');
+            const region = document.querySelector('input[name="region"]:checked');
+            
+            if (!language || !region) {
+                showNotification('Please select both a language and region', 'error');
+                return;
+            }
+            
+            await transformResume(language.value, region.value);
+        });
+
+        async function transformResume(language, region) {
+            isTransforming = true;
+            const btn = document.getElementById('transformBtn');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>Transforming Resume...';
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Get transformed content
+                const content = transformedContent[language] && transformedContent[language][region] 
+                    ? transformedContent[language][region] 
+                    : generateDefaultTransformation(language, region);
+                
+                // Update preview
+                document.getElementById('transformedPreview').innerHTML = content;
+                document.getElementById('previewSection').classList.add('active');
+                
+                // Scroll to preview
+                document.getElementById('previewSection').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+                showNotification('Resume transformed successfully!', 'success');
+                
+            } catch (error) {
+                showNotification('Error transforming resume. Please try again.', 'error');
+            } finally {
+                isTransforming = false;
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function generateDefaultTransformation(language, region) {
+            const languageNames = {
+                spanish: 'Spanish',
+                french: 'French',
+                german: 'German',
+                portuguese: 'Portuguese',
+                italian: 'Italian',
+                mandarin: 'Mandarin'
+            };
+            
+            const regionNames = {
+                us: 'US',
+                uk: 'UK',
+                eu: 'European',
+                asia: 'Asian',
+                latam: 'Latin American',
+                mena: 'MENA'
+            };
+            
+            return `<strong>Transformed Resume</strong><br>
+Language: ${languageNames[language] || language}<br>
+Region: ${regionNames[region] || region}<br><br>
+
+<em>This is a sample transformation showing how your resume would be adapted for the ${languageNames[language]} language and ${regionNames[region]} regional format.</em><br><br>
+
+The actual transformation would include:<br>
+• Professional translation of all content<br>
+• Cultural adaptation of terminology<br>
+• Regional formatting conventions<br>
+• Industry-specific adjustments<br>
+• Appropriate personal information inclusion`;
+        }
+
+        function downloadResume(format) {
+            // Simulate download
+            showNotification(`Downloading resume in ${format.toUpperCase()} format...`, 'success');
+            
+            // In a real implementation, this would trigger actual download
+            setTimeout(() => {
+                showNotification(`Resume downloaded successfully as ${format.toUpperCase()}!`, 'success');
+            }, 1000);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageElement = document.getElementById('notification-message');
+
+            messageElement.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add dynamic content based on selections
+        document.addEventListener('DOMContentLoaded', function() {
+            const languageRadios = document.querySelectorAll('input[name="language"]');
+            const regionRadios = document.querySelectorAll('input[name="region"]');
+            
+            // Update form based on selections
+            function updateFormDynamically() {
+                const selectedLanguage = document.querySelector('input[name="language"]:checked');
+                const selectedRegion = document.querySelector('input[name="region"]:checked');
+                
+                if (selectedLanguage && selectedRegion) {
+                    updateRequirements(selectedLanguage.value, selectedRegion.value);
+                }
+            }
+            
+            languageRadios.forEach(radio => {
+                radio.addEventListener('change', updateFormDynamically);
+            });
+            
+            regionRadios.forEach(radio => {
+                radio.addEventListener('change', updateFormDynamically);
+            });
+        });
+
+        function updateRequirements(language, region) {
+            const requirementsField = document.getElementById('additional-requirements');
+            let placeholder = "Any specific cultural adaptations, industry requirements, or formatting preferences...";
+            
+            // Update placeholder based on selection
+            const suggestions = {
+                'spanish-us': 'Consider bilingual capabilities, US Hispanic market preferences...',
+                'spanish-latam': 'Include family status, personal references, regional certifications...',
+                'french-eu': 'Europass format compliance, EU work authorization status...',
+                'german-eu': 'Include photo, birthdate, marital status as per German standards...',
+                'mandarin-asia': 'Consider Chinese name format, educational hierarchy emphasis...',
+                'portuguese-latam': 'Brazilian market preferences, professional references...'
+            };
+            
+            const key = `${language}-${region}`;
+            if (suggestions[key]) {
+                placeholder = suggestions[key];
+            }
+            
+            requirementsField.placeholder = placeholder;
+        }
+
+        // Enhanced language-specific content
+        const extendedTransformations = {
+            portuguese: {
+                latam: `<strong>João Smith</strong><br>
+Engenheiro de Software<br>
+📧 joao.smith@email.com | 📞 +55-11-99999-9999<br>
+Estado Civil: Solteiro | Idade: 28 anos<br><br>
+
+<strong>OBJETIVO PROFISSIONAL:</strong><br>
+Atuar como Engenheiro de Software Senior em empresa de tecnologia inovadora<br><br>
+
+<strong>EXPERIÊNCIA PROFISSIONAL:</strong><br>
+Desenvolvedor Sênior - TechCorp (2020-2023)<br>
+• Desenvolvimento de aplicações web escaláveis<br>
+• Liderança de equipe com 5 desenvolvedores<br>
+• Implementação de melhores práticas de desenvolvimento<br><br>
+
+<strong>COMPETÊNCIAS TÉCNICAS:</strong><br>
+• Linguagens: JavaScript, Python<br>
+• Frameworks: React, Node.js<br>
+• Metodologias: Ágil, Scrum<br><br>
+
+<strong>FORMAÇÃO ACADÊMICA:</strong><br>
+Bacharelado em Ciência da Computação - MIT (2018)<br><br>
+
+<strong>REFERÊNCIAS:</strong><br>
+Disponíveis mediante solicitação`,
+                
+                us: `<strong>João Smith</strong><br>
+Engenheiro de Software<br><br>
+
+<strong>EXPERIÊNCIA:</strong><br>
+• Desenvolvedor Sênior na TechCorp (2020-2023)<br>
+• Desenvolvimento de aplicações web escaláveis<br>
+• Liderança de equipe de 5 desenvolvedores<br><br>
+
+<strong>HABILIDADES:</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>EDUCAÇÃO:</strong><br>
+Bacharelado em Ciência da Computação, MIT (2018)`
+            },
+            
+            italian: {
+                eu: `<strong>Giovanni Smith</strong><br>
+Ingegnere del Software<br>
+📧 giovanni.smith@email.com | 📞 +39-333-1234567<br>
+Data di nascita: 15/03/1995 | Nazionalità: Americana<br><br>
+
+<strong>ESPERIENZA PROFESSIONALE:</strong><br>
+03/2020 - 12/2023: Sviluppatore Senior<br>
+TechCorp, Stati Uniti<br>
+• Sviluppo di applicazioni web scalabili<br>
+• Leadership di team (5 sviluppatori)<br>
+• Implementazione delle migliori pratiche<br><br>
+
+<strong>COMPETENZE TECNICHE:</strong><br>
+• Linguaggi: JavaScript, Python<br>
+• Framework: React, Node.js<br>
+• Metodologie: Agile, Scrum<br><br>
+
+<strong>ISTRUZIONE:</strong><br>
+2014-2018: Laurea in Scienze Informatiche<br>
+Massachusetts Institute of Technology (MIT)<br><br>
+
+<strong>LINGUE:</strong><br>
+• Inglese: Madrelingua<br>
+• Italiano: Fluente<br>
+• Spagnolo: Intermedio`,
+                
+                us: `<strong>Giovanni Smith</strong><br>
+Ingegnere del Software<br><br>
+
+<strong>ESPERIENZA:</strong><br>
+• Sviluppatore Senior presso TechCorp (2020-2023)<br>
+• Sviluppo di applicazioni web scalabili<br>
+• Leadership di un team di 5 sviluppatori<br><br>
+
+<strong>COMPETENZE:</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>ISTRUZIONE:</strong><br>
+Laurea in Scienze Informatiche, MIT (2018)`
+            },
+            
+            mandarin: {
+                asia: `<strong>史密斯 · 约翰 (Smith John)</strong><br>
+软件工程师<br>
+📧 john.smith@email.com | 📞 +86-138-0013-8000<br>
+出生年月：1995年3月 | 国籍：美国<br><br>
+
+<strong>求职意向：</strong><br>
+高级软件工程师职位<br><br>
+
+<strong>工作经历：</strong><br>
+2020年3月 - 2023年12月：高级开发工程师<br>
+TechCorp公司，美国<br>
+• 开发可扩展的网络应用程序<br>
+• 领导5人开发团队<br>
+• 实施最佳开发实践<br><br>
+
+<strong>专业技能：</strong><br>
+• 编程语言：JavaScript, Python<br>
+• 框架技术：React, Node.js<br>
+• 开发方法：敏捷开发, Scrum<br><br>
+
+<strong>教育背景：</strong><br>
+2014年 - 2018年：计算机科学学士学位<br>
+麻省理工学院 (MIT)<br><br>
+
+<strong>语言能力：</strong><br>
+• 英语：母语水平<br>
+• 中文：流利<br>
+• 日语：基础水平`,
+                
+                us: `<strong>约翰 · 史密斯</strong><br>
+软件工程师<br><br>
+
+<strong>工作经验：</strong><br>
+• TechCorp公司高级开发工程师 (2020-2023)<br>
+• 开发可扩展网络应用<br>
+• 领导5人开发团队<br><br>
+
+<strong>技能：</strong><br>
+JavaScript, Python, React, Node.js<br><br>
+
+<strong>教育：</strong><br>
+MIT计算机科学学士学位 (2018)`
+            }
+        };
+
+        // Merge extended transformations
+        Object.keys(extendedTransformations).forEach(lang => {
+            if (!transformedContent[lang]) {
+                transformedContent[lang] = {};
+            }
+            Object.assign(transformedContent[lang], extendedTransformations[lang]);
+        });
+
+        // Add more interactive features
+        function addInteractiveFeatures() {
+            // Add hover effects for better UX
+            const featureCards = document.querySelectorAll('.form-section');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = 'var(--shadow-lg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+            
+            // Add progress indication
+            const form = document.getElementById('transformForm');
+            const inputs = form.querySelectorAll('input[type="radio"]');
+            let completedSteps = 0;
+            
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const languageSelected = document.querySelector('input[name="language"]:checked');
+                    const regionSelected = document.querySelector('input[name="region"]:checked');
+                    
+                    completedSteps = (languageSelected ? 1 : 0) + (regionSelected ? 1 : 0);
+                    updateProgress(completedSteps);
+                });
+            });
+        }
+        
+        function updateProgress(steps) {
+            const transformBtn = document.getElementById('transformBtn');
+            if (steps === 0) {
+                transformBtn.innerHTML = '🚀 Transform Resume Internationally';
+                transformBtn.style.opacity = '0.6';
+            } else if (steps === 1) {
+                transformBtn.innerHTML = '⏳ Select Both Language & Region';
+                transformBtn.style.opacity = '0.8';
+            } else {
+                transformBtn.innerHTML = '✅ Ready to Transform!';
+                transformBtn.style.opacity = '1';
+            }
+        }
+
+        // Initialize interactive features when DOM loads
+        document.addEventListener('DOMContentLoaded', addInteractiveFeatures);
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.matches('input[type="radio"]')) {
+                e.target.checked = true;
+                e.target.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Regional formatting tips
+        const formatTips = {
+            us: "📋 US Format Tips:\n• Skills-focused layout\n• No personal photo\n• Concise 1-2 pages\n• Action-oriented language",
+            uk: "📋 UK Format Tips:\n• Called 'CV' not resume\n• Education emphasis\n• Personal statement section\n• A4 format preferred",
+            eu: "📋 EU Format Tips:\n• Europass format recommended\n• Include personal details\n• Photo may be expected\n• Detailed experience descriptions",
+            asia: "📋 Asia Format Tips:\n• Photo usually required\n• Hierarchical structure\n• Educational credentials prominent\n• Personal information detailed",
+            latam: "📋 Latin America Tips:\n• Family status often included\n• Personal references important\n• Age and marital status\n• Professional relationships emphasized",
+            mena: "📋 MENA Region Tips:\n• Cultural sensitivity important\n• Family background relevant\n• Religious considerations\n• Right-to-left language support"
+        };
+
+        // Show format tips when region is selected
+        document.querySelectorAll('input[name="region"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked && formatTips[this.value]) {
+                    showNotification(formatTips[this.value], 'info');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
