@@ -81,7 +81,7 @@ async function downloadTemplate() {
         },
         body:JSON.stringify({"htlmCode":template})
     })
-    const data=await response
+    const data=await response.json()
     if(data.result=="true"){
        showNotification('Template downloaded successfully!'); 
     }else{

@@ -137,42 +137,9 @@ body {
 /* Input Section */
 .input-section {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-bottom: 3rem;
-}
-
-.resume-status {
-    background: white;
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    height: fit-content;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    color: var(--success);
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--success);
-}
-
-#resume-info {
-    color: var(--gray);
-    font-size: 0.9rem;
 }
 
 .job-description-input {

@@ -1,6 +1,6 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
-import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator
+import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator,aiQuestion
 import json
 import pypandoc
 import io
@@ -106,5 +106,17 @@ def downloadWOrd():
         extra_args=["--standalone"]
     )
     return jsonify({"result":"true"})
+
+@app.route('/aiInterview')
+def aiInterview():
+    return render_template("aiInterview.html")
+
+@app.route("/api/aiQuestion",methods=["POST"])
+def aiGenQuestion():
+    data=request.get_json()
+    jobDescription=data.get("jobDescription")
+    result=aiQuestion.aiQuestionGenerator(jobDescription)
+    return jsonify({"result":result})
+
 if __name__=='__main__':
     app.run(debug=True)
