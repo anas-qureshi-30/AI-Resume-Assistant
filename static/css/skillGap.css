@@ -50,6 +50,10 @@ body {
     margin: 0 auto;
     padding: 2rem;
 }
+.logo::before {
+    content: "📚";
+    font-size: 1.8rem;
+}
 
 .header {
     text-align: center;

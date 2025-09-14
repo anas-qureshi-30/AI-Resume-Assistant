@@ -19,6 +19,10 @@
     background: rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(1px);
 }
+.logo::before {
+    content: "🤖";
+    font-size: 1.8rem;
+}
 
 .ats-hero .hero-content {
     position: relative;

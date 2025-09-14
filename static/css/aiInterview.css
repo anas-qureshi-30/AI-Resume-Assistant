@@ -74,6 +74,10 @@ body {
     gap: 2rem;
     align-items: center;
 }
+.logo::before {
+    content: "🎙️";
+    font-size: 1.8rem;
+}
 
 .nav-links a {
     text-decoration: none;
