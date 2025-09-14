@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,11 @@
     <script src="{{url_for('static',filename='js/atsSimulator.js')}}"></script>
     <title>ATS Simulator - AI Resume Assistant</title>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">AI ATS Simulatort</div>
+            <div class="logo">AI ATS Simulator</div>
             <a href="/" class="back-btn">← Back to Home</a>
         </div>
     </nav>
@@ -30,16 +32,15 @@
                 <div class="job-description-card">
                     <h3>🎯 Target Job Description</h3>
                     <p>Paste the job description to analyze keyword matching</p>
-                    <textarea 
-                        id="job-description" 
+                    <textarea id="job-description"
                         placeholder="Paste the job description here for better ATS analysis...&#10;&#10;Example:&#10;We are looking for a Senior Software Engineer with experience in Python, React, AWS, Docker, and agile methodologies. The ideal candidate will have 5+ years of experience building scalable web applications..."
-                        rows="8"
-                    ></textarea>
+                        rows="8"></textarea>
                     <div class="jd-actions">
                         <button class="btn-primary" onclick="runATSAnalysis()" id="analyze-btn">
                             <span class="btn-text">Run ATS Analysis</span>
-                            <span class="loading" style="display: none;">⌛</span>
+                            <span class="btn-spinner" style="display: none;">⌛</span>
                         </button>
+
                         <button class="btn-outline" onclick="loadSampleJD()">Load Sample JD</button>
                     </div>
                 </div>
@@ -52,7 +53,7 @@
                         <h2>ATS Compatibility Score</h2>
                         <p>Based on formatting, keywords, and structure analysis</p>
                     </div>
-                    
+
                     <div class="score-visual">
                         <div class="score-circle">
                             <div class="score-number" id="ats-score">0</div>
@@ -91,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="score-interpretation">
                         <div class="interpretation-item" id="score-interpretation">
                             <span class="interpretation-icon">🎯</span>
@@ -177,14 +178,8 @@
                         <button class="btn-primary" onclick="downloadReport()">
                             📄 Download Report
                         </button>
-                        <button class="btn-secondary" onclick="window.location.href='/generator'">
-                            🔧 Optimize Resume
-                        </button>
                         <button class="btn-outline" onclick="runNewAnalysis()">
                             🔄 Run New Analysis
-                        </button>
-                        <button class="btn-outline" onclick="shareResults()">
-                            📤 Share Results
                         </button>
                     </div>
                 </div>
@@ -199,9 +194,10 @@
 
     <script>
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializeATS();
         });
     </script>
 </body>
+
 </html>

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static',filename='css/homePage.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/resumeGeneratorJD.css')}}">
-    <script src="{{url_for('static',filename='js/resumeGeneratorJD.js')}}"></script>
     <title>AI Resume Generator - Job Description Based</title>
 </head>
 
@@ -23,34 +22,34 @@
             <h1>🎯 AI Resume Generator</h1>
             <p>Generate a professional, ATS-optimized resume tailored to any job description using advanced AI</p>
         </div>
-
+        
         <div class="generator-container">
             <div class="input-section">
                 <h2 class="section-title">
                     📝 Job Description & Profile
                 </h2>
-
+                
                 <form id="resume-form">
                     <div class="form-group">
                         <label class="form-label">Job Description *</label>
                         <textarea class="form-textarea" id="job-description"
-                            placeholder="Paste the complete job description here. Include requirements, responsibilities, and qualifications..."
+                        placeholder="Paste the complete job description here. Include requirements, responsibilities, and qualifications..."
                             required></textarea>
                     </div>
-
-
-
+                    
+                    
+                    
                     <button type="submit" class="btn-primary" id="generate-btn">
                         Generate Resume
                     </button>
                 </form>
             </div>
-
+            
             <div class="output-section">
                 <h2 class="section-title">
                     📄 Generated Resume
                 </h2>
-
+                
                 <div class="resume-preview" id="resume-preview">
                     <div class="placeholder-text">
                         📋 Your AI-generated resume will appear here once you fill out the form and click "Generate
@@ -79,11 +78,11 @@
             </div>
         </div>
     </div>
-
+    
     <div class="notification" id="notification">
         <div id="notification-message"></div>
     </div>
-
+    <script src="{{url_for('static',filename='js/resumeGeneratorJD.js')}}"></script>
 </body>
 
 </html>

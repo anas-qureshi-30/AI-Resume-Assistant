@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static',filename='css/homePage.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/resumeRankingPredictor.css')}}">
-    <script src="{{url_for('static',filename='js/homePage.js')}}"></script>
     <script src="{{url_for('static',filename='js/resumeRankingPredictor.js')}}"></script>
     <title>Resume Ranking Predictor - AI Resume Assistant</title>
     
@@ -191,11 +190,7 @@
                             <div class="action-icon">📄</div>
                             <div class="action-text">Download Report</div>
                         </button>
-                        <button class="action-btn" onclick="optimizeResume()">
-                            <div class="action-icon">⚡</div>
-                            <div class="action-text">Optimize Resume</div>
-                        </button>
-                        <button class="action-btn" onclick="findCourses()">
+                        <button class="action-btn" onclick="window.location.href='/skillGap'">
                             <div class="action-icon">📚</div>
                             <div class="action-text">Skill Courses</div>
                         </button>

@@ -99,7 +99,27 @@ body {
     background: var(--primary-dark);
     transform: translateY(-2px);
 }
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    border-left: 4px solid var(--success);
+    z-index: 3000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
 
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.error {
+    border-left-color: var(--danger);
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -137,13 +157,13 @@ body {
     margin-bottom: 2rem;
 }
 
-.progress-bar {
+.progress-bar-self {
     height: 6px;
     background: var(--light-gray);
     position: relative;
 }
 
-.progress-fill {
+.progress-fill-self {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     width: 0%;
@@ -415,13 +435,13 @@ textarea {
     background: var(--success);
 }
 
-.loading {
+.loading-self {
     display: none;
     text-align: center;
     padding: 3rem;
 }
 
-.loading.active {
+.loading-self.active {
     display: block;
 }
 

@@ -121,8 +121,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-setInterval(updateDashboardMetrics, 30000);
-
 setTimeout(() => {
     if (Math.random() > 0.5) {
         showNotification('Welcome! Upload your resume to get started.', 'warning');

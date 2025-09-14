@@ -528,3 +528,20 @@
         max-width: 300px;
     }
 }
+.btn-spinner {
+  margin-left: 0.5rem;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    padding: 5px;
+    border: 1.8px solid var(--primary);
+    border-radius: 5px;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}

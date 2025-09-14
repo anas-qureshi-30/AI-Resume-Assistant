@@ -35,8 +35,8 @@
         </div>
 
         <div class="form-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-bar-self">
+                <div class="progress-fill-self" id="progressFillSelf"></div>
             </div>
 
             <form id="resumeForm">
@@ -64,11 +64,11 @@
                         </div>
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" id="city" name="city" placeholder="e.g., New York">
+                            <input type="text" id="city" name="city" placeholder="e.g., Mumbai">
                         </div>
                         <div class="form-group">
                             <label for="state">State/Province</label>
-                            <input type="text" id="state" name="state" placeholder="e.g., NY">
+                            <input type="text" id="state" name="state" placeholder="e.g., Maharashtra">
                         </div>
                         <div class="form-group">
                             <label for="linkedIn">LinkedIn Profile</label>
@@ -136,7 +136,7 @@
                                 <div class="form-group full-width">
                                     <label>Location</label>
                                     <input type="text" name="experience[0][location]"
-                                        placeholder="e.g., San Francisco, CA">
+                                        placeholder="e.g., Mumbai">
                                 </div>
                                 <div class="form-group full-width">
                                     <label>Key Responsibilities & Achievements</label>
@@ -167,7 +167,7 @@
                                 <div class="form-group">
                                     <label>Institution <span class="required">*</span></label>
                                     <input type="text" name="education[0][school]"
-                                        placeholder="e.g., Stanford University" required>
+                                        placeholder="e.g., AIKTC" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Graduation Year</label>
@@ -175,8 +175,8 @@
                                         placeholder="2023">
                                 </div>
                                 <div class="form-group">
-                                    <label>GPA (Optional)</label>
-                                    <input type="text" name="education[0][gpa]" placeholder="3.8/4.0">
+                                    <label>CGPA (Optional)</label>
+                                    <input type="text" name="education[0][gpa]" placeholder="8.8/10.0">
                                 </div>
                                 <div class="form-group full-width">
                                     <label>Relevant Coursework/Honors</label>
@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        <div class="loading" id="loadingSection">
+        <div class="loading-self" id="loadingSection">
             <div class="spinner"></div>
             <h3>Generating Your AI-Powered Resume...</h3>
             <p>Our AI is analyzing your information and creating a professional, ATS-optimized resume tailored to your
@@ -296,10 +296,9 @@
                 customizations.</p>
 
             <div style="margin: 2rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
-                <button class="btn btn-primary">📥 Download PDF</button>
-                <button class="btn btn-secondary">📝 Download DOCX</button>
-                <button class="btn btn-secondary">✏️ Edit Resume</button>
-                <button class="btn btn-secondary">🔄 Generate New Version</button>
+                <button class="btn btn-secondary" onclick="downloadWord()">📝 Download DOCX</button>
+                <button class="btn btn-secondary" onclick="editTemplate()">✏️ Edit Resume</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">📄 Copy To ClipBoard</button>
             </div>
 
             <div style="background: #f9fafb; padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem;">
@@ -314,7 +313,9 @@
             </div>
         </div>
     </div>
-
+    <div class="notification" id="notification">
+        <div id="notification-message">Template generated successfully!</div>
+    </div>
     
 </body>
 

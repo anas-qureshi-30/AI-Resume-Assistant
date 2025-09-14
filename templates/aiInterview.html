@@ -6,7 +6,6 @@
     <title>AI Interview Readiness Report</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/homePage.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/aiInterview.css')}}">
-    <script src="{{url_for('static',filename='js/homePage.js')}}"></script>
     <script src="{{url_for('static',filename='js/aiInterview.js')}}"></script>
 </head>
 <body>
@@ -43,7 +42,7 @@ We are seeking a Senior Software Engineer with 5+ years of experience in Python,
                     <div class="input-actions">
                         <button class="btn-primary" onclick="generateReport()" id="generate-btn">
                             <span class="btn-text">Generate Report</span>
-                            <span class="loading" style="display: none;"></span>
+                            <span class="btn-spinner" style="display: none;">⌛</span>
                         </button>
                         <button class="btn-secondary" onclick="loadSampleJD()">Load Sample</button>
                     </div>
@@ -86,9 +85,6 @@ We are seeking a Senior Software Engineer with 5+ years of experience in Python,
                         </button>
                         <button class="btn-secondary" onclick="generateNewReport()">
                             Generate New Report
-                        </button>
-                        <button class="btn-outline" onclick="shareReport()">
-                            Share Report
                         </button>
                     </div>
                 </div>

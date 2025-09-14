@@ -67,7 +67,6 @@ function showNotification(message, type = 'success') {
 
 async function downloadWord() {
     const resumeText = document.getElementById('resume-preview').innerHTML;
-    console.log("Here")
     const response = await fetch("/wordDownload", {
         method: "POST",
         headers: {

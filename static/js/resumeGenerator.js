@@ -9,7 +9,7 @@ let projectCount = 1;
 
 function updateProgress() {
     const progress = (currentStep / totalSteps) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
+    document.getElementById('progressFillSelf').style.width = progress + '%';
     document.getElementById('stepInfo').textContent = `Step ${currentStep} of ${totalSteps}`;
 
     // Update step indicators
@@ -345,6 +345,7 @@ async function generateResume() {
     } catch (error) {
         console.log(error)
     } finally {
+        showNotification("Resume generated successfully!!")
         document.getElementById('loadingSection').classList.remove('active');
         document.getElementById('generatedResume').classList.add('active');
     }
@@ -353,4 +354,55 @@ async function generateResume() {
 function generateResumePreview(data) {
     const preview = document.getElementById('resumePreview');
     preview.innerHTML = data
+}
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const messageElement = document.getElementById('notification-message');
+
+    messageElement.textContent = message;
+    notification.className = `notification ${type} show`;
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+async function downloadWord() {
+    const resumeText = document.getElementById('resumePreview').innerHTML;
+    const response = await fetch("/wordDownload", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ "htlmCode": resumeText })
+    })
+    const data = await response.json()
+    if (data.result == "true") {
+        showNotification("Word file downloaded successfully!!")
+    } else {
+        showNotification("Error downloading word file!!")
+    }
+}
+
+function copyToClipboard() {
+    const resumeText = document.getElementById('resumePreview').innerText;
+    navigator.clipboard.writeText(resumeText).then(() => {
+        showNotification('Resume text copied to clipboard!');
+    });
+}
+
+function editTemplate() {
+    const templateDiv = document.getElementById('resumePreview');
+    const isEditable = templateDiv.contentEditable === 'true';
+
+    if (isEditable) {
+        templateDiv.contentEditable = 'false';
+        templateDiv.style.border = 'none';
+        showNotification('Editing disabled. Changes saved!');
+    } else {
+        templateDiv.contentEditable = 'true';
+        templateDiv.style.border = '2px dashed #6366f1';
+        templateDiv.focus();
+        showNotification('You can now edit the template. Click Edit again to save.');
+    }
 }
