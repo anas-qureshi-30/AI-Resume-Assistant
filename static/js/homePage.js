@@ -81,34 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function switchTab(tabName) {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    event.target.classList.add('active');
-
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    const targetTab = document.getElementById(tabName);
-    if (targetTab) {
-        targetTab.classList.add('active');
-    }
-
-    currentTab = tabName;
-}
-
-function updateDashboardMetrics() {
-    const metrics = ['match-score', 'applications', 'interviews', 'skills'];
-    metrics.forEach(metric => {
-        const element = document.getElementById(metric);
-        if (element) {
-            let currentValue = parseInt(element.textContent);
-            let increment = Math.floor(Math.random() * 5) + 1;
-            element.textContent = (currentValue + increment) + (metric === 'match-score' ? '%' : '');
-        }
-    });
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     const observerOptions = {
@@ -128,15 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(card);
     });
 
-    setTimeout(() => {
-        document.querySelectorAll('.progress-fill').forEach(bar => {
-            const width = bar.style.width;
-            bar.style.width = '0%';
-            setTimeout(() => {
-                bar.style.width = width;
-            }, 500);
-        });
-    }, 1000);
 });
 
 window.onclick = function (event) {

@@ -69,6 +69,7 @@ def atsScoreGenerator(userJobDescription):
     - Scores should be consistent with issues found.  
     - If no issues are found, return empty arrays for "issues" and "suggestions".  
     - Do not output anything outside of the JSON object.  
+    - You have to give exact ats score of resume wrt to job description.
 
     JobDescription: """+ userJobDescription+" User Resume: "+text)
     cleaned = response.text.strip()

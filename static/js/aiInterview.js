@@ -1,4 +1,4 @@
-    // AI Interview Readiness Report JavaScript
+// AI Interview Readiness Report JavaScript
 
 // Global variables
 let currentReport = null;
@@ -78,18 +78,21 @@ async function generateReport() {
     // Set loading state
     setGeneratingState(true);
     try {
-        const response = await fetch("/api/aiQuestion",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch("/api/aiQuestion", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({"jobDescription":jobDescription})
+            body: JSON.stringify({ "jobDescription": jobDescription })
         })
         const data = await response.json()
         currentReport = data.result;
         updateCounters()
         displayInterviewQuestions()
         displayMockQA()
+        const resultsSection = document.getElementById('results-section');
+        resultsSection.style.display = 'block';
+        resultsSection.classList.add('show');
         showNotification('Interview readiness report generated successfully!', 'success');
 
     } catch (error) {
@@ -128,11 +131,11 @@ function setGeneratingState(generating) {
 function displayInterviewQuestions() {
     const container = document.getElementById('questions-container');
     const questions = currentReport.interviewQuestions;
-    container.innerHTML = questions.map(question => `
+    container.innerHTML = questions.map(q => `
         <div class="question-item slide-in-up">
-            <div class="question-category">${question.category}</div>
-            <div class="question-text">${question.question}</div>
-            <div class="question-difficulty">Difficulty: ${question.difficulty}</div>
+            <div class="question-category">${q.category}</div>
+            <div class="question-text">${q.question}</div>
+            <div class="question-difficulty">Difficulty: ${q.difficulty}</div>
         </div>
     `).join('');
     // Add staggered animation

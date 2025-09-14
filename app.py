@@ -1,6 +1,6 @@
 from flask import Flask,render_template,jsonify, request,session
 import os
-import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator,aiQuestion
+import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator,aiQuestion,aiJDResumeGenerator
 import json
 import pypandoc
 import io
@@ -30,10 +30,20 @@ def fileInput():
             return render_template("homePage.html")        
     return render_template("homePage.html")
         
+@app.route("/resumeGeneratorJD")
+def resumeGeneratorJD():
+    return render_template("resumeGeneratorJD.html")
+
+@app.route("/api/resumeGeneratorJD",methods=["POST"])
+def aiResumeJDGen():
+    data=request.get_json()
+    userData=data.get("userInput")
+    aiResponse=aiJDResumeGenerator.aiJDResumeGen(userData)
+    return jsonify({"result":aiResponse})
 
 @app.route("/templateGenerator")
 def tempGenerator():
-    return render_template("templateGenerator.html")
+        return render_template("templateGenerator.html")
 
 @app.route("/api/templateGeneratorAI",methods=["POST"])
 def aiTemplateGenerator():
@@ -54,7 +64,10 @@ def aiResumeGenerator():
 
 @app.route('/jdParser')
 def jdParser():
-    return render_template('JDParser.html')
+    if "file_path" in session:
+        return render_template('JDParser.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
 @app.route('/api/jdParser',methods=["POST"])
 def jdParserApi():
@@ -65,7 +78,10 @@ def jdParserApi():
 
 @app.route('/skillGap')
 def skillGapPage():
-    return render_template('skillGap.html')
+    if "file_path" in session:
+        return render_template('skillGap.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
 @app.route("/api/skillGap",methods=["POST"])
 def skillGapApi():
@@ -77,7 +93,10 @@ def skillGapApi():
 
 @app.route('/resumeRankingPredictor')
 def resumeRankingPredictor():
-    return render_template('resumeRankingPredictor.html')
+    if "file_path" in session:
+        return render_template('resumeRankingPredictor.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
 @app.route('/api/resumeRanking')
 def resumeRankingApi():
@@ -86,7 +105,10 @@ def resumeRankingApi():
 
 @app.route('/atsSimulator')
 def atsSimulator():
-    return render_template('atsSimulator.html')
+    if "file_path" in session:
+        return render_template('atsSimulator.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
 @app.route("/api/atsSimulator",methods=["POST"])
 def apiAtsSimulator():
@@ -98,7 +120,6 @@ def apiAtsSimulator():
 @app.route("/wordDownload",methods=["POST"])
 def downloadWOrd():
     data=request.get_json()
-    print("here")
     pypandoc.convert_text(data.get("htlmCode"),
         "docx",
         format="html",
@@ -109,7 +130,10 @@ def downloadWOrd():
 
 @app.route('/aiInterview')
 def aiInterview():
-    return render_template("aiInterview.html")
+    if "file_path" in session:
+        return render_template("aiInterview.html")
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
 @app.route("/api/aiQuestion",methods=["POST"])
 def aiGenQuestion():
