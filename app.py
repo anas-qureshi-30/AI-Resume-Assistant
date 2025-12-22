@@ -8,7 +8,12 @@ import io
 with open("config.json") as f:
     config=json.load(f)
 
-app=Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder="templates",
+    static_folder="static"
+)
+
 app.secret_key=config["SECRET_KEY"]
 
 UPLOADED_RESUME_FOLDER='./uploadedResumeFolder'
