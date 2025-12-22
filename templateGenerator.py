@@ -4,7 +4,7 @@ def generateTemplate(userDescription):
     with open("config.json") as f:
         config=json.load(f)
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
     response=model.generate_content("You are a strict output-only model. "
     "Your only purpose is to generate detailed resume templates in HTML format. "
     "Rules you must follow: "

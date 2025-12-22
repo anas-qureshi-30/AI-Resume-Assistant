@@ -11,7 +11,7 @@ def atsScoreGenerator(userJobDescription):
     with zipfile.ZipFile(file) as resume:
         text=resume.read("word/document.xml").decode("utf-8")
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
     response=model.generate_content("""
     You are an ATS (Applicant Tracking System) simulation engine.
     The user will provide two inputs:

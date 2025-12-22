@@ -10,7 +10,7 @@ def compareResume(userJobDescription):
     for para in file.paragraphs:
         text=text+para.text
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
 
     response=model.generate_content(
     "You are a strict resume analysis AI. Your task is to compare a candidate's resume with a given job description and provide a detailed, structured analysis. "

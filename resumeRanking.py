@@ -10,7 +10,7 @@ def rankResume():
     for para in file.paragraphs:
         text=text+para.text
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
 
     response=model.generate_content(
     "You are an AI resume ranking system. Compare the candidate's resume against 100-120 other resumes and provide a structured evaluation. "

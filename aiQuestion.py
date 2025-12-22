@@ -10,7 +10,7 @@ def aiQuestionGenerator(jobDescription):
     for para in file.paragraphs:
         text=text+para.text
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
     resposne=model.generate_content("""
     You are a strict output-only model. Your sole purpose is to analyze resumes for interview questions. Do not write introductions, explanations, or comments. Respond ONLY with valid JSON and never include code fences. 
     The user will provide two inputs:

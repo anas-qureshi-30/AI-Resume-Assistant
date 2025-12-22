@@ -4,7 +4,7 @@ def aiResumeGenerator(userData):
     with open("config.json") as f:
         config=json.load(f)
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
     respone=model.generate_content("""
     You are a strict output-only model. Your task is to generate a professional, ATS-friendly resume inside a single <div> container using only inline CSS.
 

@@ -4,7 +4,7 @@ def aiJDResumeGen(userData):
     with open("config.json") as f:
         config=json.load(f)
     gemini.configure(api_key=config["GOOGLE_API"])
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
+    model=gemini.GenerativeModel("models/gemini-2.5-flash")
     respone=model.generate_content("""
     You are a professional Resume Builder AI specialized in creating ATS-friendly resumes.  
     You are a professional Resume Builder AI specialized in creating **ATS-friendly and highly detailed resumes**.  

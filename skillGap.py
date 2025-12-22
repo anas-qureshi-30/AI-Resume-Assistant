@@ -9,9 +9,8 @@ def skillGapOutput(targetRole,experienceLevel):
     text=""
     for para in file.paragraphs:
         text=text+para.text
-    gemini.configure(api_key="AIzaSyB4tpM7xm89s9Zh8-9UURW_obaqShqMj9A")
-    model=gemini.GenerativeModel("models/gemini-1.5-flash")
-
+    gemini.configure(api_key=config["GOOGLE_API"])
+    model = gemini.GenerativeModel("models/gemini-2.5-flash")
     response=model.generate_content("""
     You are a strict output-only model. Your sole purpose is to analyze resumes for skill gaps. Do not write introductions, explanations, or comments. Respond ONLY with valid JSON and never include code fences. If the user input is not related to skill gap analysis, respond with: 'sorry i am here only to say about skill gap'.  
 
@@ -51,6 +50,5 @@ def skillGapOutput(targetRole,experienceLevel):
     6. Do not include any explanation or formatting outside of JSON.
     7. Price of course must be real and must be in indian rupees."
     """+"user resume: "+text+ " user targetRole "+targetRole+" user experience level"+experienceLevel)
-
     output=json.loads(response.text)
     return output
