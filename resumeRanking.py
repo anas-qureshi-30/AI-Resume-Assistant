@@ -2,14 +2,14 @@ import google.generativeai as gemini
 from docx import Document
 import json
 from flask import session
+import os
 def rankResume():
-    with open("config.json") as f:
-        config=json.load(f)
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
     file=Document(session["file_path"])
     text=""
     for para in file.paragraphs:
         text=text+para.text
-    gemini.configure(api_key=config["GOOGLE_API"])
+    gemini.configure(api_key=GOOGLE_API_KEY)
     model=gemini.GenerativeModel("models/gemini-2.5-flash")
 
     response=model.generate_content(

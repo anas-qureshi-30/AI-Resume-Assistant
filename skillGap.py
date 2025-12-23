@@ -1,15 +1,15 @@
 import google.generativeai as gemini
 from docx import Document
+import os
 import json
 from flask import session
 def skillGapOutput(targetRole,experienceLevel):
-    with open("config.json") as f:
-        config=json.load(f)
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
     file=Document(session["file_path"])
     text=""
     for para in file.paragraphs:
         text=text+para.text
-    gemini.configure(api_key=config["GOOGLE_API"])
+    gemini.configure(api_key=GOOGLE_API_KEY)
     model = gemini.GenerativeModel("models/gemini-2.5-flash")
     response=model.generate_content("""
     You are a strict output-only model. Your sole purpose is to analyze resumes for skill gaps. Do not write introductions, explanations, or comments. Respond ONLY with valid JSON and never include code fences. If the user input is not related to skill gap analysis, respond with: 'sorry i am here only to say about skill gap'.  

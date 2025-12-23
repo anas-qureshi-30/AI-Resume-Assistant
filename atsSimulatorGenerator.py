@@ -2,15 +2,14 @@ import google.generativeai as gemini
 import json
 from flask import session
 import zipfile
-
+import os
 def atsScoreGenerator(userJobDescription):
-    with open("config.json") as f:
-        config=json.load(f)
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
     file=session["file_path"]
     text=""
     with zipfile.ZipFile(file) as resume:
         text=resume.read("word/document.xml").decode("utf-8")
-    gemini.configure(api_key=config["GOOGLE_API"])
+    gemini.configure(api_key=GOOGLE_API_KEY)
     model=gemini.GenerativeModel("models/gemini-2.5-flash")
     response=model.generate_content("""
     You are an ATS (Applicant Tracking System) simulation engine.

@@ -1,15 +1,15 @@
 import google.generativeai as gemini
 from docx import Document
 from flask import session
+import os
 import json
 def aiQuestionGenerator(jobDescription):
-    with open("config.json") as f:
-        config=json.load(f)
     file=Document(session["file_path"])
     text=""
     for para in file.paragraphs:
         text=text+para.text
-    gemini.configure(api_key=config["GOOGLE_API"])
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+    gemini.configure(api_key=GOOGLE_API_KEY)
     model=gemini.GenerativeModel("models/gemini-2.5-flash")
     resposne=model.generate_content("""
     You are a strict output-only model. Your sole purpose is to analyze resumes for interview questions. Do not write introductions, explanations, or comments. Respond ONLY with valid JSON and never include code fences. 

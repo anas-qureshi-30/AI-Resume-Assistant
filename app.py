@@ -5,11 +5,8 @@ import json
 import pypandoc
 import io
 
-with open("config.json") as f:
-    config=json.load(f)
-
 app=Flask(__name__)
-app.secret_key=config["SECRET_KEY"]
+app.secret_key = os.environ.get("SECRET_KEY")
 
 UPLOADED_RESUME_FOLDER='/tmp/uploadedResumeFolder'
 app.config["UPLOADED_RESUME_FOLDER"]=UPLOADED_RESUME_FOLDER
