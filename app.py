@@ -11,9 +11,9 @@ with open("config.json") as f:
 app=Flask(__name__)
 app.secret_key=config["SECRET_KEY"]
 
-UPLOADED_RESUME_FOLDER='./uploadedResumeFolder'
+UPLOADED_RESUME_FOLDER='/tmp/uploadedResumeFolder'
 app.config["UPLOADED_RESUME_FOLDER"]=UPLOADED_RESUME_FOLDER
-os.makedirs(UPLOADED_RESUME_FOLDER,exist_ok=True)
+os.makedirs(UPLOADED_RESUME_FOLDER, exist_ok=True)
 
 @app.route("/")
 def homePage():
@@ -123,7 +123,7 @@ def downloadWOrd():
     pypandoc.convert_text(data.get("htlmCode"),
         "docx",
         format="html",
-        outputfile="output.docx",
+        outputfile="/tmp/output.docx",
         extra_args=["--standalone"]
     )
     return jsonify({"result":"true"})
