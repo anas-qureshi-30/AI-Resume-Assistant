@@ -1,157 +1,146 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask,render_template,jsonify, request,session
 import os
+import templateGenerator,compareResume,resumeRanking,skillGap,resumeGenerator,atsSimulatorGenerator,aiQuestion,aiJDResumeGenerator
+import json
+import pypandoc
+import io
 
-app = Flask(
-    __name__,
-    template_folder="templates",
-    static_folder="static"
-)
+with open("config.json") as f:
+    config=json.load(f)
 
-# SECRET KEY (set in Vercel → Environment Variables)
-app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
+app=Flask(__name__)
+app.secret_key=config["SECRET_KEY"]
 
-# Vercel-safe temp folder
-UPLOAD_FOLDER = "/tmp"
-app.config["UPLOADED_RESUME_FOLDER"] = UPLOAD_FOLDER
-
+UPLOADED_RESUME_FOLDER='./uploadedResumeFolder'
+app.config["UPLOADED_RESUME_FOLDER"]=UPLOADED_RESUME_FOLDER
+os.makedirs(UPLOADED_RESUME_FOLDER,exist_ok=True)
 
 @app.route("/")
 def homePage():
     return render_template("homePage.html")
 
-
-@app.route("/resumeInput", methods=["GET", "POST"])
+@app.route('/resumeInput',methods=["POST","GET"])
 def fileInput():
-    if request.method == "POST":
-        file = request.files.get("resume")
+    if request.method=="POST":
+        file=request.files["resume"]
         if file:
-            file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+            file_path = os.path.join(app.config['UPLOADED_RESUME_FOLDER'], file.filename)
             file.save(file_path)
-            session["file_path"] = file_path
+            session['file_path'] = file_path
+            return render_template("homePage.html")        
     return render_template("homePage.html")
-
-
+        
 @app.route("/resumeGeneratorJD")
-def resumeGeneratorJDPage():
+def resumeGeneratorJD():
     return render_template("resumeGeneratorJD.html")
 
-
-@app.route("/api/resumeGeneratorJD", methods=["POST"])
+@app.route("/api/resumeGeneratorJD",methods=["POST"])
 def aiResumeJDGen():
-    import aiJDResumeGenerator
-    data = request.get_json()
-    result = aiJDResumeGenerator.aiJDResumeGen(data.get("userInput"))
-    return jsonify({"result": result})
-
+    data=request.get_json()
+    userData=data.get("userInput")
+    aiResponse=aiJDResumeGenerator.aiJDResumeGen(userData)
+    return jsonify({"result":aiResponse})
 
 @app.route("/templateGenerator")
-def templateGeneratorPage():
-    return render_template("templateGenerator.html")
+def tempGenerator():
+        return render_template("templateGenerator.html")
 
-
-@app.route("/api/templateGeneratorAI", methods=["POST"])
+@app.route("/api/templateGeneratorAI",methods=["POST"])
 def aiTemplateGenerator():
-    import templateGenerator
-    data = request.get_json()
-    result = templateGenerator.generateTemplate(
-        data.get("jobDescription")
-    )
-    return jsonify({"result": result})
-
+    userInput=request.get_json()
+    aiGeneratedTemplate=templateGenerator.generateTemplate(userInput.get("jobDescription"))
+    return jsonify({"result":aiGeneratedTemplate})
 
 @app.route("/resumeGenerator")
-def resumeGeneratorPage():
+def resumeGen():
     return render_template("resumeGenerator.html")
 
-
-@app.route("/api/resumeGenerator", methods=["POST"])
+@app.route("/api/resumeGenerator",methods=["POST"])
 def aiResumeGenerator():
-    import resumeGenerator
-    data = request.get_json()
-    result = resumeGenerator.aiResumeGenerator(
-        data.get("resumeData")
-    )
-    return jsonify({"aiResponse": result})
+    userInput=request.get_json()
+    userData=userInput.get("resumeData")
+    aiResponse=resumeGenerator.aiResumeGenerator(userData)
+    return jsonify({"aiResponse":aiResponse})
 
-
-@app.route("/jdParser")
+@app.route('/jdParser')
 def jdParser():
     if "file_path" in session:
-        return render_template("JDParser.html")
-    return render_template("homePage.html", alertMsg="Please upload resume first")
+        return render_template('JDParser.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
-
-@app.route("/api/jdParser", methods=["POST"])
+@app.route('/api/jdParser',methods=["POST"])
 def jdParserApi():
-    import compareResume
-    data = request.get_json()
-    result = compareResume.compareResume(
-        data.get("jobDescription")
-    )
-    return jsonify({"aiCompareResume": result})
+    userInput=request.get_json()
+    aiCompareResume=compareResume.compareResume(userInput.get("jobDescription"))
+    return jsonify({"aiCompareResume":aiCompareResume})
 
 
-@app.route("/skillGap")
+@app.route('/skillGap')
 def skillGapPage():
     if "file_path" in session:
-        return render_template("skillGap.html")
-    return render_template("homePage.html", alertMsg="Please upload resume first")
+        return render_template('skillGap.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
-
-@app.route("/api/skillGap", methods=["POST"])
+@app.route("/api/skillGap",methods=["POST"])
 def skillGapApi():
-    import skillGap
-    data = request.get_json()
-    result = skillGap.skillGapOutput(
-        data.get("targetRole"),
-        data.get("experienceLevel")
-    )
-    return jsonify({"skillGapData": result})
+    userData=request.get_json()
+    targetRole=userData.get("targetRole")
+    experienceLevel=userData.get("experienceLevel")
+    skillGapData=skillGap.skillGapOutput(targetRole,experienceLevel)
+    return jsonify({"skillGapData":skillGapData})
 
-
-@app.route("/resumeRankingPredictor")
+@app.route('/resumeRankingPredictor')
 def resumeRankingPredictor():
     if "file_path" in session:
-        return render_template("resumeRankingPredictor.html")
-    return render_template("homePage.html", alertMsg="Please upload resume first")
+        return render_template('resumeRankingPredictor.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
-
-@app.route("/api/resumeRanking")
+@app.route('/api/resumeRanking')
 def resumeRankingApi():
-    import resumeRanking
-    result = resumeRanking.rankResume()
-    return jsonify({"rankingdata": result})
+    rankingdata=resumeRanking.rankResume()
+    return jsonify({"rankingdata":rankingdata})
 
-
-@app.route("/atsSimulator")
+@app.route('/atsSimulator')
 def atsSimulator():
     if "file_path" in session:
-        return render_template("atsSimulator.html")
-    return render_template("homePage.html", alertMsg="Please upload resume first")
+        return render_template('atsSimulator.html')
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
+@app.route("/api/atsSimulator",methods=["POST"])
+def apiAtsSimulator():
+    userData=request.get_json()
+    userInput=userData.get("jobDescription")
+    atsData=atsSimulatorGenerator.atsScoreGenerator(userInput)
+    return jsonify({"atsData":atsData})
 
-@app.route("/api/atsSimulator", methods=["POST"])
-def atsSimulatorApi():
-    import atsSimulatorGenerator
-    data = request.get_json()
-    result = atsSimulatorGenerator.atsScoreGenerator(
-        data.get("jobDescription")
+@app.route("/wordDownload",methods=["POST"])
+def downloadWOrd():
+    data=request.get_json()
+    pypandoc.convert_text(data.get("htlmCode"),
+        "docx",
+        format="html",
+        outputfile="output.docx",
+        extra_args=["--standalone"]
     )
-    return jsonify({"atsData": result})
+    return jsonify({"result":"true"})
 
-
-@app.route("/aiInterview")
+@app.route('/aiInterview')
 def aiInterview():
     if "file_path" in session:
         return render_template("aiInterview.html")
-    return render_template("homePage.html", alertMsg="Please upload resume first")
+    else:
+        return render_template("homePage.html",alertMsg="Please Upload a Resume First.")
 
+@app.route("/api/aiQuestion",methods=["POST"])
+def aiGenQuestion():
+    data=request.get_json()
+    jobDescription=data.get("jobDescription")
+    result=aiQuestion.aiQuestionGenerator(jobDescription)
+    return jsonify({"result":result})
 
-@app.route("/api/aiQuestion", methods=["POST"])
-def aiQuestionApi():
-    import aiQuestion
-    data = request.get_json()
-    result = aiQuestion.aiQuestionGenerator(
-        data.get("jobDescription")
-    )
-    return jsonify({"result": result})
+if __name__=='__main__':
+    app.run(debug=True)
